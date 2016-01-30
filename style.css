@@ -20,19 +20,24 @@ body {
     background: linear-gradient(to bottom, brown 0%, brown 39%, silver 40%, silver 60%, brown 61%, brown 100%);
     border-left: 2px solid gray;
     padding: 0.5em;
-    color: rgba(0, 0, 0, 0.25);
 }
 
-.fretboard-fret2.selected .fretboard-fret-text {
-    text-align: center;
+.fretboard-fret-text {
     display: inline-block;
-    background-color: white;
-    width: 1em;
-    height: 1em;
-    line-height: 1em;
     border-radius: 50%;
     padding: 0.25em;
     margin: -0.25em;
-    border: 1px solid black;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    color: rgba(0, 0, 0, 0.25);
+    background-color: transparent;
+    border: 1px solid transparent;
+    transition: all 250ms linear;
+}
+
+.fretboard-fret2.selected .fretboard-fret-text {
+    background-color: white;
+    border-color: black;
     color: black;
 }
