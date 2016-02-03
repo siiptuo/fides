@@ -2,7 +2,27 @@ body {
     font-family: sans-serif;
     font-size: 14px;
     max-width: 960px;
-    margin: 0 auto;
+    margin: 1em auto;
+}
+
+select,
+input {
+    font: inherit;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0 1em 0 0;
+    height: 2em;
+    border: 1px solid silver;
+    border-radius: 2px;
+    background-color: white;
+}
+
+input[type='number'] {
+    width: 3em;
+}
+
+form {
+    margin-bottom: 1em;
 }
 
 .fretboard {
