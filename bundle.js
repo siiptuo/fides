@@ -19,14 +19,20 @@ fretboard.className = 'fretboard';
 
 const noteFretMap = new Array(12);
 
-const frets = new Array(25);
-frets[0] = 50;
-let max = frets[0];
-for (let i = 1; i < 25; i++) {
-    frets[i] = 100 * Math.pow(0.95, i);
-    max += frets[i];
+function generateFretWidths(count) {
+    const frets = new Array(count + 1);
+    frets[0] = 50;
+    let max = frets[0];
+    for (let i = 1; i <= count; i++) {
+        frets[i] = 100 * Math.pow(0.95, i);
+        max += frets[i];
+    }
+    max /= 100;
+    for (let i = 0; i <= count; i++) {
+        frets[i] /= max;
+    }
+    return frets;
 }
-max /= 100;
 
 function changeScale(scale, key) {
     for (let fret of document.getElementsByClassName('fretboard-fret2')) {
@@ -39,16 +45,16 @@ function changeScale(scale, key) {
     }
 }
 
-function changeTuning(tuning) {
+function changeTuning(tuning, fretWidths) {
     fretboard.innerHTML = '';
     for (let i = 0; i < 12; i++) {
         noteFretMap[i] = [];
     }
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < fretWidths.length; i++) {
         const fret = fretboard.appendChild(document.createElement('div'));
         fret.className = 'fretboard-fret';
-        fret.style.width = (frets[i] / max) + '%';
+        fret.style.width = fretWidths[i] + '%';
 
         for (let j = tuning.length - 1; j >= 0; j--) {
             const fret2 = fret.appendChild(document.createElement('div'));
@@ -77,11 +83,17 @@ scaleSelect.addEventListener('change', event => {
     changeScale(scales[scaleSelect.value], +keySelect.value);
 });
 
-const tuningSelect = document.getElementsByName('tuning')[0];
-tuningSelect.addEventListener('change', event => {
-    changeTuning(parseTuning(tuningSelect.value));
+const fretsInput = document.getElementsByName('frets')[0];
+fretsInput.addEventListener('change', event => {
+    changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
     changeScale(scales[scaleSelect.value], +keySelect.value);
 });
 
-changeTuning(parseTuning(tuningSelect.value));
+const tuningSelect = document.getElementsByName('tuning')[0];
+tuningSelect.addEventListener('change', event => {
+    changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
+    changeScale(scales[scaleSelect.value], +keySelect.value);
+});
+
+changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
 changeScale(scales[scaleSelect.value], +keySelect.value);
