@@ -1,3 +1,5 @@
+'use strict';
+
 const scales = {
     'ionian': [0, 2, 4, 5, 7, 9, 11],
     'dorian': [0, 2, 3, 5, 7, 9, 10],
@@ -35,7 +37,8 @@ function generateFretWidths(count) {
 }
 
 function changeScale(scale, key) {
-    for (let fret of document.getElementsByClassName('fretboard-fret2')) {
+    const frets = Array.from(document.getElementsByClassName('fretboard-fret2'));
+    for (var fret of frets) {
         fret.classList.remove('selected');
     }
     for (let i = 0; i < scale.length; i++) {
