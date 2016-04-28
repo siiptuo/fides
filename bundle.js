@@ -7,6 +7,14 @@ function parseTuning(input) {
     return input.split('').map(i => notes2.indexOf(i));
 }
 
+function tuningToString(tuning) {
+    return tuning.map(x => notes2[x]).join('');
+}
+
+function parseScale(str) {
+    return str.split(',').map(x => +x);
+}
+
 const fretboard = document.body.appendChild(document.createElement('div'));
 fretboard.className = 'fretboard';
 
@@ -24,6 +32,8 @@ function generateFretWidths(count) {
     for (let i = 0; i <= count; i++) {
         frets[i] /= max;
     }
+    localStorage.setItem('frets', count);
+    fretsInput.value = count;
     return frets;
 }
 
@@ -40,6 +50,10 @@ function changeScale(scale, key) {
             fret.classList.add('selected');
         }
     }
+    localStorage.setItem('scale', scale.join(','));
+    localStorage.setItem('key', key);
+    scaleSelect.value = scale.join(',');
+    keySelect.value = key;
 }
 
 function changeTuning(tuning, fretWidths) {
@@ -68,10 +82,8 @@ function changeTuning(tuning, fretWidths) {
         const number = fret.appendChild(document.createElement('div'));
         number.textContent = i;
     }
-}
-
-function parseScale(str) {
-    return str.split(',').map(x => +x);
+    localStorage.setItem('tuning', tuningToString(tuning));
+    tuningSelect.value = tuningToString(tuning);
 }
 
 const keySelect = document.getElementsByName('key')[0];
@@ -96,5 +108,11 @@ tuningSelect.addEventListener('change', event => {
     changeScale(parseScale(scaleSelect.value), +keySelect.value);
 });
 
-changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
-changeScale(parseScale(scaleSelect.value), +keySelect.value);
+changeTuning(
+    parseTuning(localStorage.getItem('tuning') || tuningSelect.value || 'EADGBE'),
+    generateFretWidths(parseInt(localStorage.getItem('frets') || fretsInput.value || '22'))
+);
+changeScale(
+    parseScale(localStorage.getItem('scale') || scaleSelect.value || '2,4,5,7,9,11'),
+    parseInt(localStorage.getItem('key') || keySelect.value || '0')
+);
