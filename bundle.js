@@ -1,14 +1,5 @@
 'use strict';
 
-const scales = {
-    'ionian': [0, 2, 4, 5, 7, 9, 11],
-    'dorian': [0, 2, 3, 5, 7, 9, 10],
-    'phrygian': [0, 1, 3, 5, 7, 8, 10],
-    'lydian': [0, 2, 4, 6, 7, 9, 11],
-    'mixolydian': [0, 2, 4, 5, 7, 9, 10],
-    'aeolian': [0, 2, 3, 5, 7, 8, 10],
-    'locrian': [0, 1, 3, 5, 6, 8, 10]
-};
 const notes = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
 const notes2 = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
@@ -40,6 +31,9 @@ function changeScale(scale, key) {
     const frets = Array.from(document.getElementsByClassName('fretboard-fret2'));
     for (var fret of frets) {
         fret.classList.remove('selected');
+    }
+    for (let fret of noteFretMap[key]) {
+        fret.classList.add('selected');
     }
     for (let i = 0; i < scale.length; i++) {
         for (let fret of noteFretMap[(key + scale[i]) % 12]) {
@@ -76,27 +70,31 @@ function changeTuning(tuning, fretWidths) {
     }
 }
 
+function parseScale(str) {
+    return str.split(',').map(x => +x);
+}
+
 const keySelect = document.getElementsByName('key')[0];
 keySelect.addEventListener('change', event => {
-    changeScale(scales[scaleSelect.value], +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value);
 });
 
 const scaleSelect = document.getElementsByName('scale')[0];
 scaleSelect.addEventListener('change', event => {
-    changeScale(scales[scaleSelect.value], +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value);
 });
 
 const fretsInput = document.getElementsByName('frets')[0];
 fretsInput.addEventListener('change', event => {
     changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
-    changeScale(scales[scaleSelect.value], +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value);
 });
 
 const tuningSelect = document.getElementsByName('tuning')[0];
 tuningSelect.addEventListener('change', event => {
     changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
-    changeScale(scales[scaleSelect.value], +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value);
 });
 
 changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
-changeScale(scales[scaleSelect.value], +keySelect.value);
+changeScale(parseScale(scaleSelect.value), +keySelect.value);
