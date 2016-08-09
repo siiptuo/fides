@@ -29,35 +29,77 @@ form {
     cursor: default;
     text-align: center;
     font-size: 10px;
+    background-image: url(fretboard.png);
+    background-size: 256px;
+    background-position: center;
+    position: relative;
+}
+
+.fretboard-string {
+    background: linear-gradient(white, black);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.fretboard-string-wound {
+    background: linear-gradient(transparent, black), repeating-linear-gradient(75deg, silver, silver 1px, white 1px, white 2px);
 }
 
 .fretboard-fret {
     display: inline-block;
     box-sizing: border-box;
+    position: relative;
+    height: 100%;
 }
 
-.fretboard-fret2 {
-    background: linear-gradient(to bottom, brown 0%, brown 39%, silver 40%, silver 60%, brown 61%, brown 100%);
-    border-left: 2px solid gray;
-    padding: 0.5em;
+.fretboard-fret-number {
+    position: absolute;
+    bottom: -1.5em;
+    text-align: center;
+    right: 0;
+    left: 0;
+}
+
+.fretboard-nut {
+    width: 6px;
+    position: absolute;
+    top: 0;
+    right: -3px;
+    bottom: 0;
+    background: linear-gradient(to right, white, #eee 20%, #eee 80%, #eee);
+}
+
+.fretboard-actual-fret {
+    width: 4px;
+    position: absolute;
+    top: 0;
+    right: -2px;
+    bottom: 0;
+    background: linear-gradient(to right, white, silver 40%, silver 60%, gray);
 }
 
 .fretboard-fret-text {
     display: inline-block;
-    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+    transform: translateX(-50%);
     padding: 0.25em;
-    margin: -0.25em;
     width: 1em;
     height: 1em;
     line-height: 1em;
+    border-radius: 50%;
     color: rgba(0, 0, 0, 0.25);
     background-color: transparent;
     border: 1px solid transparent;
     transition: all 250ms linear;
 }
 
-.fretboard-fret2.selected .fretboard-fret-text {
+.fretboard-fret-text.selected {
     background-color: white;
     border-color: black;
     color: black;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }

@@ -38,7 +38,7 @@ function generateFretWidths(count) {
 }
 
 function changeScale(scale, key) {
-    const frets = Array.from(document.getElementsByClassName('fretboard-fret2'));
+    const frets = Array.from(document.getElementsByClassName('fretboard-fret-text'));
     for (var fret of frets) {
         fret.classList.remove('selected');
     }
@@ -58,8 +58,20 @@ function changeScale(scale, key) {
 
 function changeTuning(tuning, fretWidths) {
     fretboard.innerHTML = '';
+    fretboard.style.height = 2 * tuning.length + 'em';
+
     for (let i = 0; i < 12; i++) {
         noteFretMap[i] = [];
+    }
+
+    for (let j = tuning.length - 1; j >= 0; j--) {
+        const string = fretboard.appendChild(document.createElement('div'));
+        string.className = 'fretboard-string';
+        if (j >= Math.floor(tuning.length / 2)) {
+            string.className += ' fretboard-string-wound';
+        }
+        string.style.height = 1 + j + 'px';
+        string.style.top = 1 + (2) * j + 'em';
     }
 
     for (let i = 0; i < fretWidths.length; i++) {
@@ -67,20 +79,31 @@ function changeTuning(tuning, fretWidths) {
         fret.className = 'fretboard-fret';
         fret.style.width = fretWidths[i] + '%';
 
-        for (let j = tuning.length - 1; j >= 0; j--) {
-            const fret2 = fret.appendChild(document.createElement('div'));
-            const noteIndex = (tuning[j] + i) % 12;
-            const note = notes[noteIndex];
-            fret2.className = 'fretboard-fret2';
-
-            const text = fret2.appendChild(document.createElement('span'));
-            text.className = 'fretboard-fret-text';
-            text.textContent = note;
-            noteFretMap[noteIndex].push(fret2);
-        }
+        const actualFret = fret.appendChild(document.createElement('div'));
+        actualFret.className = i === 0 ? 'fretboard-nut' : 'fretboard-actual-fret';
 
         const number = fret.appendChild(document.createElement('div'));
+        number.className = 'fretboard-fret-number';
         number.textContent = i;
+    }
+
+    let fretWidthSum = 0;
+
+    for (let i = 0; i < fretWidths.length; i++) {
+        for (let j = tuning.length - 1; j >= 0; j--) {
+            const noteIndex = (tuning[j] + i) % 12;
+            const note = notes[noteIndex];
+
+            const fret = fretboard.appendChild(document.createElement('div'));
+            fret.className = 'fretboard-fret-text';
+            fret.style.top = 0.25 + 2 * j + 'em';
+            fret.style.left = fretWidthSum + fretWidths[i] / 2 + '%';
+            fret.textContent = note;
+
+            noteFretMap[noteIndex].push(fret);
+        }
+
+        fretWidthSum += fretWidths[i];
     }
     localStorage.setItem('tuning', tuningToString(tuning));
     tuningSelect.value = tuningToString(tuning);
