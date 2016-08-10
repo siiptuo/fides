@@ -55,6 +55,33 @@ form {
     height: 100%;
 }
 
+.fretboard-fret-single-inlay::after,
+.fretboard-fret-double-inlays::before,
+.fretboard-fret-double-inlays::after {
+    content: '';
+    display: block;
+    width: 1em;
+    height: 1em;
+    margin: -0.5em;
+    position: absolute;
+    background-color: white;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 50%;
+    left: 50%;
+}
+
+.fretboard-fret-single-inlay::after {
+    top: 50%;
+}
+
+.fretboard-fret-double-inlays::before {
+    top: 23%;
+}
+
+.fretboard-fret-double-inlays::after {
+    top: 77%;
+}
+
 .fretboard-fret-number {
     position: absolute;
     bottom: -1.5em;
