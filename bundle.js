@@ -81,10 +81,12 @@ function changeTuning(tuning, fretWidths) {
         fret.className = 'fretboard-fret';
         fret.style.width = fretWidths[i] + '%';
 
-        if (i % 12 === 3 || i % 12 === 5 || i % 12 === 7 || i % 12 === 9) {
-            fret.className += ' fretboard-fret-single-inlay';
-        } else if (i !== 0 && i % 12 === 0) {
-            fret.className += ' fretboard-fret-double-inlays';
+        if (i !== 0 && i !== fretWidths.length - 1) {
+            if (i % 12 === 3 || i % 12 === 5 || i % 12 === 7 || i % 12 === 9) {
+                fret.className += ' fretboard-fret-single-inlay';
+            } else if (i % 12 === 0) {
+                fret.className += ' fretboard-fret-double-inlays';
+            }
         }
 
         if (i !== fretWidths.length - 1) {
