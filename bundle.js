@@ -64,14 +64,14 @@ function changeTuning(tuning, fretWidths) {
         noteFretMap[i] = [];
     }
 
-    for (let j = tuning.length - 1; j >= 0; j--) {
+    for (let i = 0; i < tuning.length; i++) {
         const string = fretboard.appendChild(document.createElement('div'));
         string.className = 'fretboard-string';
-        if (j >= Math.floor(tuning.length / 2)) {
+        if (i >= Math.floor(tuning.length / 2)) {
             string.className += ' fretboard-string-wound';
         }
-        string.style.height = 1 + j + 'px';
-        string.style.top = 1 + (2) * j + 'em';
+        string.style.height = 1 + i + 'px';
+        string.style.top = 1 + 2 * i + 'em';
     }
 
     for (let i = 0; i < fretWidths.length; i++) {
@@ -90,8 +90,8 @@ function changeTuning(tuning, fretWidths) {
     let fretWidthSum = 0;
 
     for (let i = 0; i < fretWidths.length; i++) {
-        for (let j = tuning.length - 1; j >= 0; j--) {
-            const noteIndex = (tuning[j] + i) % 12;
+        for (let j = 0; j < tuning.length; j++) {
+            const noteIndex = (tuning[tuning.length - j - 1] + i) % 12;
             const note = notes[noteIndex];
 
             const fret = fretboard.appendChild(document.createElement('div'));
