@@ -18,7 +18,8 @@ function parseScale(str) {
 const fretboard = document.body.appendChild(document.createElement('div'));
 fretboard.className = 'fretboard';
 
-const noteFretMap = new Array(12);
+let noteFretMap = new Array(12);
+let fretFretMap;
 
 function generateFretWidths(count) {
     const frets = new Array(count + 2);
@@ -39,23 +40,127 @@ function generateFretWidths(count) {
     return frets;
 }
 
-function changeScale(scale, key) {
+function equalArray(a1, a2) {
+    return a1.length === a2.length && a1.every((v, i) => v === a2[i]);
+}
+
+function mod(a, n) {
+    return ((a % n) + n) % n;
+}
+
+let lastScale;
+let lastKey;
+
+function changeScale(scale, key, fretWidths, tuning) {
     const frets = Array.from(document.getElementsByClassName('fretboard-fret-text'));
-    for (var fret of frets) {
-        fret.classList.remove('selected');
-    }
-    for (let fret of noteFretMap[key]) {
-        fret.classList.add('selected');
-    }
-    for (let i = 0; i < scale.length; i++) {
-        for (let fret of noteFretMap[(key + scale[i]) % 12]) {
+
+    if (key !== lastKey && lastScale && equalArray(lastScale, scale)) {
+        const diff = key - lastKey;
+        const newFretFretMap = [];
+        const newNoteFretMap = Array(12);
+        for (let i = 0; i < 12; i++) {
+            newNoteFretMap[i] = [];
+        }
+        const fretsToRemove = [];
+        setTimeout(function () {
+            for (let fret of fretsToRemove) {
+                fretboard.removeChild(fret);
+            }
+        }, 1000);
+
+        for (let i = 0; i < fretFretMap.length; i++) {
+            newFretFretMap[i + diff] = [];
+            for (let fret of fretFretMap[i]) {
+                let sum = 0;
+                if (i + diff < 0) {
+                    sum = 5 * (i + diff);
+                    fretsToRemove.push(fret);
+                    fret.classList.remove('selected');
+                } else if (i + diff > fretWidths.length - 2) {
+                    sum = 100 + 5 * (i + diff - fretWidths.length);
+                    fretsToRemove.push(fret);
+                    fret.classList.remove('selected');
+                } else {
+                    for (let j = 0; j < i + diff; j++) {
+                        sum += fretWidths[j];
+                    }
+                    sum += fretWidths[i + diff] / 2;
+                    newFretFretMap[i + diff].push(fret);
+
+                    const currentNote = notes.indexOf(fret.textContent);
+                    const newNote = mod(currentNote + diff, 12);
+                    newNoteFretMap[newNote].push(fret);
+                    fret.textContent = notes[newNote];
+                }
+                fret.style.left = sum + '%';
+            }
+        }
+
+        function createFrets(from, to, startX) {
+            let sum = 0;
+            for (let i = 0; i < from; i++) {
+                sum += fretWidths[i];
+            }
+            for (let i = from; i < to; i++) {
+                newFretFretMap[i] = [];
+                for (let j = 0; j < tuning.length; j++) {
+                    const noteIndex = (tuning[tuning.length - 1 - j] + i) % 12;
+                    const note = notes[noteIndex];
+
+                    const fret = fretboard.appendChild(document.createElement('div'));
+                    fret.className = 'fretboard-fret-text';
+                    fret.style.top = 0.25 + 2 * j + 'em';
+                    if (startX === 0) {
+                        fret.style.left = 5 * (i - to) + '%';
+                    } else {
+                        fret.style.left = 100 + 5 * (i - from) + '%';
+                    }
+                    fret.textContent = note;
+
+                    newFretFretMap[i].push(fret);
+                    newNoteFretMap[noteIndex].push(fret);
+
+                    window.getComputedStyle(fret).left;
+
+                    const noteInScale = mod(noteIndex - key, 12);
+                    if (noteIndex === key || scale.includes(noteInScale)) {
+                        fret.classList.add('selected');
+                    }
+                    fret.style.left = sum + fretWidths[i] / 2 + '%';
+                }
+                sum += fretWidths[i];
+            }
+        }
+
+        if (diff < 0) {
+            createFrets(fretWidths.length + diff - 1, fretWidths.length - 1, 100);
+        } else if (diff > 0) {
+            createFrets(0, diff, 0);
+        }
+
+        noteFretMap = newNoteFretMap;
+        fretFretMap = newFretFretMap;
+    } else {
+        for (var fret of frets) {
+            fret.classList.remove('selected');
+        }
+        for (let fret of noteFretMap[key]) {
             fret.classList.add('selected');
         }
+        for (let i = 0; i < scale.length; i++) {
+            for (let fret of noteFretMap[(key + scale[i]) % 12]) {
+                fret.classList.add('selected');
+            }
+        }
     }
+
     localStorage.setItem('scale', scale.join(','));
     localStorage.setItem('key', key);
     scaleSelect.value = scale.join(',');
     keySelect.value = key;
+
+    lastScale = scale;
+    lastKey = key;
 }
 
 function changeTuning(tuning, fretWidths) {
@@ -64,6 +169,11 @@ function changeTuning(tuning, fretWidths) {
 
     for (let i = 0; i < 12; i++) {
         noteFretMap[i] = [];
+    }
+
+    fretFretMap = new Array(fretWidths.length);
+    for (let i = 0; i < fretWidths.length; i++) {
+        fretFretMap[i] = [];
     }
 
     for (let i = 0; i < tuning.length; i++) {
@@ -112,6 +222,7 @@ function changeTuning(tuning, fretWidths) {
             fret.style.left = fretWidthSum + fretWidths[i] / 2 + '%';
             fret.textContent = note;
 
+            fretFretMap[i].push(fret);
             noteFretMap[noteIndex].push(fret);
         }
 
@@ -123,24 +234,24 @@ function changeTuning(tuning, fretWidths) {
 
 const keySelect = document.getElementsByName('key')[0];
 keySelect.addEventListener('change', event => {
-    changeScale(parseScale(scaleSelect.value), +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value, generateFretWidths(+fretsInput.value), parseTuning(tuningSelect.value));
 });
 
 const scaleSelect = document.getElementsByName('scale')[0];
 scaleSelect.addEventListener('change', event => {
-    changeScale(parseScale(scaleSelect.value), +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value, generateFretWidths(+fretsInput.value), parseTuning(tuningSelect.value));
 });
 
 const fretsInput = document.getElementsByName('frets')[0];
 fretsInput.addEventListener('change', event => {
     changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
-    changeScale(parseScale(scaleSelect.value), +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value, generateFretWidths(+fretsInput.value), parseTuning(tuningSelect.value));
 });
 
 const tuningSelect = document.getElementsByName('tuning')[0];
 tuningSelect.addEventListener('change', event => {
     changeTuning(parseTuning(tuningSelect.value), generateFretWidths(+fretsInput.value));
-    changeScale(parseScale(scaleSelect.value), +keySelect.value);
+    changeScale(parseScale(scaleSelect.value), +keySelect.value, generateFretWidths(+fretsInput.value), parseTuning(tuningSelect.value));
 });
 
 changeTuning(
@@ -149,5 +260,7 @@ changeTuning(
 );
 changeScale(
     parseScale(localStorage.getItem('scale') || scaleSelect.value || '2,4,5,7,9,11'),
-    parseInt(localStorage.getItem('key') || keySelect.value || '0')
+    parseInt(localStorage.getItem('key') || keySelect.value || '0'),
+    generateFretWidths(parseInt(localStorage.getItem('frets') || fretsInput.value || '22')),
+    parseTuning(localStorage.getItem('tuning') || tuningSelect.value || 'EADGBE')
 );
