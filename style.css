@@ -113,7 +113,7 @@ form {
     display: inline-block;
     position: absolute;
     z-index: 2;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(0);
     padding: 0.25em;
     width: 1em;
     height: 1em;
@@ -122,10 +122,11 @@ form {
     background-color: yellow;
     color: black;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), inset -1px -1px 2px rgba(0, 0, 0, 0.5);
-    transition: opacity 500ms linear, left 500ms ease-out;
+    transition: opacity 500ms linear, left 500ms ease-out, transform 500ms ease-out;
     opacity: 0;
 }
 
 .fretboard-fret-text.selected {
     opacity: 1;
+    transform: translateX(-50%) scale(1);
 }
