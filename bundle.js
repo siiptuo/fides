@@ -58,7 +58,12 @@ function changeScale(scale, key, fretWidths, tuning) {
     const frets = Array.from(document.getElementsByClassName('fretboard-fret-text'));
 
     if (key !== lastKey && lastScale && equalArray(lastScale, scale)) {
-        const diff = key - lastKey;
+        let diff = key - lastKey;
+        if (diff > 6) {
+            diff -= 12;
+        } else if (diff < -6) {
+            diff += 12;
+        }
         const newFretFretMap = [];
         const newNoteFretMap = Array(12);
         for (let i = 0; i < 12; i++) {
