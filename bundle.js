@@ -100,7 +100,9 @@ function changeScale(scale, key, fretWidths, tuning) {
                     newNoteFretMap[newNote].push(fret);
                     fret.textContent = notes[newNote];
                 }
-                fret.style.left = sum + '%';
+                const translates = fret.style.transform.split(' ');
+                translates[0] = `translateX(${sum * 9.6}px)`;
+                fret.style.transform = translates.join(' ');
             }
         }
 
@@ -117,24 +119,26 @@ function changeScale(scale, key, fretWidths, tuning) {
 
                     const fret = fretboard.appendChild(document.createElement('div'));
                     fret.className = 'fretboard-fret-text';
-                    fret.style.top = 0.25 + 2 * j + 'em';
+                    const y = 0.25 + 2 * j + 'em';
+                    let x = 0;
                     if (startX === 0) {
-                        fret.style.left = 5 * (i - to) + '%';
+                        x = 5 * (i - to);
                     } else {
-                        fret.style.left = 100 + 5 * (i - from) + '%';
+                        x = 100 + 5 * (i - from);
                     }
+                    fret.style.transform = `translate(${x * 9.6}px, ${y}) translateX(-50%)`;
                     fret.textContent = note;
 
                     newFretFretMap[i].push(fret);
                     newNoteFretMap[noteIndex].push(fret);
 
-                    window.getComputedStyle(fret).left;
+                    window.getComputedStyle(fret).transform;
 
                     const noteInScale = mod(noteIndex - key, 12);
                     if (noteIndex === key || scale.includes(noteInScale)) {
                         fret.classList.add('selected');
                     }
-                    fret.style.left = sum + fretWidths[i] / 2 + '%';
+                    fret.style.transform = `translateX(${(sum + fretWidths[i] / 2) * 9.6}px) translateY(${y}) translateX(-50%)`;
                 }
                 sum += fretWidths[i];
             }
@@ -226,8 +230,9 @@ function changeTuning(tuning, fretWidths) {
 
             const fret = fretboard.appendChild(document.createElement('div'));
             fret.className = 'fretboard-fret-text';
-            fret.style.top = 0.25 + 2 * j + 'em';
-            fret.style.left = fretWidthSum + fretWidths[i] / 2 + '%';
+            const x = (fretWidthSum + fretWidths[i] / 2) * 9.6 + 'px';
+            const y = 0.25 + 2 * j + 'em';
+            fret.style.transform = `translateX(${x}) translateY(${y}) translateX(-50%)`;
             fret.textContent = note;
 
             fretFretMap[i].push(fret);

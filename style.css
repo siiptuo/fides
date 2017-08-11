@@ -39,7 +39,8 @@ form {
     background-size: 256px;
     background-position: center;
     position: relative;
-    min-width: 500px;
+    width: 960px;
+    overflow: hidden;
 }
 
 .fretboard-string {
@@ -118,8 +119,10 @@ form {
 .fretboard-fret-text {
     display: inline-block;
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 2;
-    transform: translateX(-50%) scale(0);
+    /* transform: translateX(-50%) scale(0); */
     padding: 0.25em;
     width: 1em;
     height: 1em;
@@ -134,5 +137,5 @@ form {
 
 .fretboard-fret-text.selected {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    /* transform: translateX(-50%) scale(1); */
 }
