@@ -15,7 +15,7 @@ function parseScale(str) {
     return str.split(',').map(x => +x);
 }
 
-const fretboardContainer = document.body.appendChild(document.createElement('div'));
+const fretboardContainer = document.getElementsByTagName('main')[0].appendChild(document.createElement('div'));
 fretboardContainer.className = 'fretboard-container';
 
 const fretboard = fretboardContainer.appendChild(document.createElement('div'));
