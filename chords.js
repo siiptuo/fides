@@ -11,41 +11,67 @@ function parseChord(input) {
     }
 }
 
-function generateChords(tuning, frets, notes) {
-    const chords = [];
-    for (let rootString = 0; rootString < tuning.length; rootString++) {
-        for (let rootFret = tuning[rootString] - notes[0]; rootFret < frets; rootFret += 12) {
-            const chord = [-1, -1, -1, -1, -1, -1];
-            for (let i = rootString; i < tuning.length; i++) {
-                for (let fret = rootFret; fret < Math.min(frets, rootFret + 5); fret++) {
-                    const n = (tuning[i] + fret) % 12;
-                    if (notes.includes(n)) {
-                        chord[i] = fret;
-                        break;
-                    }
-                }
-            }
-            chords.push(chord);
+function generateChord(tuning, frets, notes, usedNotes, fingering) {
+    if (fingering.length === tuning.length) {
+        return Object.keys(usedNotes).length === notes.length ? [fingering] : [];
+    }
+
+    const string = fingering.length;
+
+    const reach = 4;
+    const min = Math.max(0, Math.max(...fingering) - (reach - 1));
+    const max = Math.min(Math.min(...fingering.filter(x => x > 0)) + (reach - 1), frets);
+
+    let fingerings = [];
+
+    // Open string
+    if (min > 0 && notes.includes(tuning[string])) {
+        fingerings = [...fingerings, ...generateChord(tuning, frets, notes, {...usedNotes, [tuning[string]]: true}, [...fingering, 0])];
+    }
+
+    // Muted string
+    fingerings = [...fingerings, ...generateChord(tuning, frets, notes, usedNotes, [...fingering, -1])];
+
+    // Fretted note
+    for (let fret = min; fret <= max; fret++) {
+        const note = (tuning[string] + fret) % 12;
+        if (notes.includes(note)) {
+            fingerings = [...fingerings, ...generateChord(tuning, frets, notes, {...usedNotes, [note]: true}, [...fingering, fret])];
         }
     }
+
+    return fingerings;
+}
+
+function generateChords(tuning, frets, notes) {
+    const rootNote = notes[0];
+
+    let chords = [];
+    for (let string = 0; string < tuning.length - notes.length; string++) {
+        for (let fret = 0; fret < frets; fret++) {
+            const note = (tuning[string] + fret) % 12;
+            if (note === rootNote) {
+                chords = [...chords, ...generateChord(tuning, frets, notes, {[note]: true}, [...Array(string).fill(-1), fret])];
+            }
+        }
+    }
+
     console.log(JSON.stringify(chords));
     return chords;
 }
 
 function render(strings) {
-    let startFret = Math.min.apply(null, strings.filter(str => str !== -1));
+    const endFret = Math.max(...strings.filter(s => s > 0));
+    const startFret = endFret <= 4 ? 0 : Math.min(...strings.filter(s => s > 0));
     console.log(strings, startFret);
     const fretWidth = 10;
     const fretHeight = 18;
     const frets = 4;
     const radius = 4;
-    const fontSize = 10;
+    const fontSize = 8;
     let output = '<svg width="' + ((fretWidth + 3) * strings.length) + '" height="' + ((frets + 1.5) * fretHeight) + '">';
     if (startFret !== 0) {
-        output += '<text x="' + (1.5 * fretWidth - 4) + '" y="' + (fretHeight + fontSize) + '" font-size="' + fontSize + '" text-anchor="end">' + startFret + '</text>';
-    }
-    if (strings.every(str => str !== 0)) {
-        startFret--;
+        output += '<text x="' + (1.5 * fretWidth - 6) + '" y="' + (fretHeight + fontSize) + '" font-size="' + fontSize + '" text-anchor="end">' + startFret + '</text>';
     }
     output += '<g transform="translate(' + (fretWidth) + ')">';
     for (let x = 0; x < strings.length; x++) {
@@ -63,7 +89,7 @@ function render(strings) {
         } else if (strings[x] == 0) {
             output += '<circle cx="' + (x * fretWidth + radius) + '" cy="' + (fretHeight / 2) + '" r="' + (radius - 0.5) + '" stroke="black" stroke-width="1" fill="none" stroke-linecap="round" />';
         } else {
-            const displayFret = strings[x] - startFret;
+            const displayFret = strings[x] - startFret + (startFret ? 1 : 0);
             output += '<circle cx="' + (x * fretWidth + radius) + '" cy="' + (fretHeight / 2 + displayFret * fretHeight) + '" r="' + radius + '" />';
         }
     }
