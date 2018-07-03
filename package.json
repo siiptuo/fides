@@ -1,0 +1,23 @@
+{
+  "name": "fides",
+  "version": "1.0.0",
+  "description": "Fides is a web-based scale tool for stringed instruments.",
+  "main": "chords.js",
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^1.13.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siiptuo/fides.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/siiptuo/fides/issues"
+  },
+  "homepage": "https://github.com/siiptuo/fides#readme"
+}
