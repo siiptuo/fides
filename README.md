@@ -1,5 +1,7 @@
 # Fides
 
+[![Build Status](https://travis-ci.org/siiptuo/fides.svg?branch=master)](https://travis-ci.org/siiptuo/fides)
+
 Fides is a web-based scale tool for stringed instruments.
 
 ## License

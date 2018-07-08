@@ -1,0 +1,10 @@
+language: node_js
+node_js: 'node'
+before_deploy: ./build.bash
+deploy:
+  provider: pages
+  local-dir: public
+  skip_cleanup: true
+  github-token: $GITHUB_TOKEN
+  on:
+    branch: master
