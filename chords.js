@@ -1,4 +1,45 @@
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const tuningMidi = [40, 45, 50, 55, 59, 64]
+const tuning = [4, 9, 2, 7, 11, 4];
+const frets = 22;
+
+const context = new AudioContext();
+
+let stringSounds = [];
+
+[
+  'sounds/117677__kyster__e-open-string.wav',
+  'sounds/117673__kyster__a-open-string.wav',
+  'sounds/117676__kyster__d-open-string.wav',
+  'sounds/117678__kyster__g-open-string.wav',
+  'sounds/117674__kyster__b-open-string.wav',
+  'sounds/117679__kyster__e-open-string.wav',
+].forEach((url, i) => fetch(url)
+  .then(res => res.arrayBuffer())
+  .then(buf => context.decodeAudioData(buf))
+  .then(buf => stringSounds[i] = buf));
+
+function midiToHertz(note) {
+  return 2 ** ((note - 69) / 12) * 440;
+}
+
+function playSound(sound, rate) {
+  const source = context.createBufferSource();
+  source.buffer = sound;
+  source.playbackRate.value = rate;
+  source.connect(context.destination);
+  source.start(0);
+}
+
+function playChord(chord) {
+  chord.forEach((note, i) => {
+    if (note >= 0) {
+      setTimeout(() => {
+        playSound(stringSounds[i], midiToHertz(tuningMidi[i] + note) / midiToHertz(tuningMidi[i]));
+      }, 80 * (i - 1));
+    }
+  });
+}
 
 function parseChord(input) {
   const match = input.match(/^([A-G][b#]?)(.*)$/i);
@@ -189,9 +230,6 @@ function render(strings) {
   return output;
 }
 
-const tuning = [4, 9, 2, 7, 11, 4];
-const frets = 22;
-
 const $chord = document.getElementsByName("chord")[0];
 const $output = document.getElementsByTagName("output")[0];
 
@@ -200,4 +238,7 @@ document.forms[0].addEventListener("submit", event => {
   const chord = parseChord($chord.value);
   const chords = generateChords(tuning, frets, chord);
   $output.innerHTML = chords.map(render).join("");
+  $output.querySelectorAll('svg').forEach((el, i) => {
+    el.addEventListener('click', () => playChord(chords[i]));
+  });
 });

@@ -182,3 +182,12 @@ form {
   opacity: 1;
   /* transform: translateX(-50%) scale(1); */
 }
+
+output svg {
+  background-color: white;
+  cursor: pointer;
+}
+
+output svg:hover {
+  opacity: 0.5;
+}
