@@ -1,5 +1,9 @@
 language: node_js
 node_js: 'node'
+addons:
+  apt:
+    packages:
+    - ffmpeg
 before_deploy: ./build.bash
 deploy:
   provider: pages

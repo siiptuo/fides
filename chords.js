@@ -3,6 +3,7 @@ const tuningMidi = [40, 45, 50, 55, 59, 64]
 const tuning = [4, 9, 2, 7, 11, 4];
 const frets = 22;
 
+const AudioContext = window.AudioContext || window.webkitAudioContext;
 const context = new AudioContext();
 
 let stringSounds = [];
@@ -16,8 +17,7 @@ let stringSounds = [];
   'sounds/117679__kyster__e-open-string.wav',
 ].forEach((url, i) => fetch(url)
   .then(res => res.arrayBuffer())
-  .then(buf => context.decodeAudioData(buf))
-  .then(buf => stringSounds[i] = buf));
+  .then(buf => context.decodeAudioData(buf, buf => stringSounds[i] = buf)));
 
 function midiToHertz(note) {
   return 2 ** ((note - 69) / 12) * 440;
