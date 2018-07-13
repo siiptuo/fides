@@ -280,7 +280,10 @@ document.forms[0].addEventListener("submit", event => {
     return;
   }
   const chords = generateChords(tuning, frets, chord.notes);
-  $output.innerHTML = '<h1>' + chord.name + '</h1>' + '<p>Formula: ' + chord.formula.join(', ') + '</p>' + chords.map(render).join("");
+  $output.innerHTML = '<h1>' + chord.name + '</h1>' +
+    '<p>Notes: ' + chord.notes.map(note => notes[note]).join(', ') + '</p>' +
+    '<p>Integer notation: {' + chord.formula.join(', ') + '}</p>' +
+    chords.map(render).join("");
   $output.querySelectorAll('svg').forEach((el, i) => {
     el.addEventListener('click', () => playChord(chords[i]));
   });
