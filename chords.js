@@ -43,12 +43,21 @@ function playChord(chord) {
 
 function parseChord(input) {
   const match = input.match(/^([A-G][b#]?)(.*)$/i);
-  const root = notes.indexOf(match[1]);
+  const note = match[1];
+  const root = notes.indexOf(note);
   const modifier = match[2];
   if (modifier === "") {
-    return [root, (root + 4) % 12, (root + 7) % 12];
+    return {
+      name: `${note} major`,
+      formula: [0, 4, 7],
+      notes: [root, (root + 4) % 12, (root + 7) % 12]
+    };
   } else if (modifier === "m") {
-    return [root, (root + 3) % 12, (root + 7) % 12];
+    return {
+      name: `${note} minor`,
+      formula: [0, 3, 7],
+      notes: [root, (root + 3) % 12, (root + 7) % 12],
+    };
   }
 }
 
@@ -236,8 +245,8 @@ const $output = document.getElementsByTagName("output")[0];
 document.forms[0].addEventListener("submit", event => {
   event.preventDefault();
   const chord = parseChord($chord.value);
-  const chords = generateChords(tuning, frets, chord);
-  $output.innerHTML = chords.map(render).join("");
+  const chords = generateChords(tuning, frets, chord.notes);
+  $output.innerHTML = '<h1>' + chord.name + '</h1>' + '<p>Formula: ' + chord.formula.join(', ') + '</p>' + chords.map(render).join("");
   $output.querySelectorAll('svg').forEach((el, i) => {
     el.addEventListener('click', () => playChord(chords[i]));
   });

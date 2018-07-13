@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width">
     <title>Fides</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <style>
+      form {
+        position: relative;
+        max-width: 200px;
+        float: right;
+      }
+
+      input {
+        display: block;
+        width: 100%;
+        padding: .5rem;
+        height: auto;
+      }
+
+      button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 2.25rem;
+        padding: 0;
+        border: none;
+        background: none;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -20,11 +46,10 @@
     </header>
     <main>
     <form>
-      <label>
-        Chord:
-        <input name="chord">
-      </label>
-      <button type="submit">Find</button>
+      <input type="search" name="chord" placeholder="Chord">
+      <button type="submit">
+        <i class="fas fa-search"></i>
+      </button>
     </form>
     <output></output>
     </main>
