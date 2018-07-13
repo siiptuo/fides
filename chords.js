@@ -41,23 +41,48 @@ function playChord(chord) {
   });
 }
 
+const modifierMap = {
+  "m": "minor",
+  "min": "minor",
+  "": "major",
+  "M": "major",
+  "Ma": "major",
+  "Maj": "major",
+  "+": "augmented",
+  "aug": "augmented",
+  "dim": "diminished",
+};
+
 function parseChord(input) {
   const match = input.match(/^([A-G][b#]?)(.*)$/i);
   const note = match[1];
   const root = notes.indexOf(note);
-  const modifier = match[2];
-  if (modifier === "") {
-    return {
-      name: `${note} major`,
-      formula: [0, 4, 7],
-      notes: [root, (root + 4) % 12, (root + 7) % 12]
-    };
-  } else if (modifier === "m") {
-    return {
-      name: `${note} minor`,
-      formula: [0, 3, 7],
-      notes: [root, (root + 3) % 12, (root + 7) % 12],
-    };
+  const modifier = modifierMap[match[2]];
+  switch (modifier) {
+    case 'minor':
+      return {
+        name: `${note} minor`,
+        formula: [0, 3, 7],
+        notes: [root, (root + 3) % 12, (root + 7) % 12],
+      };
+    case 'major':
+      return {
+        name: `${note} major`,
+        formula: [0, 4, 7],
+        notes: [root, (root + 4) % 12, (root + 7) % 12]
+      };
+    case 'augmented':
+      return {
+        name: `${note} augmented`,
+        formula: [0, 4, 8],
+        notes: [root, (root + 4) % 12, (root + 8) % 12]
+      };
+    case 'diminished':
+      return {
+        name: `${note} diminished`,
+        formula: [0, 3, 6],
+        notes: [root, (root + 3) % 12, (root + 6) % 12]
+      };
   }
 }
 
