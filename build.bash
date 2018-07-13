@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+ffmpeg() {
+    if hash avconv 2>/dev/null; then
+        avconv "$@"
+    else
+        command ffmpeg "$@"
+    fi
+}
+
 mkdir -p public
 cp -r logo.svg fretboard.png style.css index.html chords.html public
 

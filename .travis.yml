@@ -3,7 +3,7 @@ node_js: 'node'
 addons:
   apt:
     packages:
-    - ffmpeg
+    - libav-tools
 before_deploy: ./build.bash
 deploy:
   provider: pages
