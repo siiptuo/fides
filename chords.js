@@ -54,9 +54,12 @@ const modifierMap = {
 };
 
 function parseChord(input) {
-  const match = input.match(/^([A-G][b#]?)(.*)$/i);
+  const match = input.match(/^([A-G][b#]?)(.*)$/);
+  if (!match) {
+    return null;
+  }
   const note = match[1];
-  const root = notes.indexOf(note);
+  const root = notes.indexOf(note); // TODO: handle "b"
   const modifier = modifierMap[match[2]];
   switch (modifier) {
     case 'minor':
@@ -83,6 +86,8 @@ function parseChord(input) {
         formula: [0, 3, 6],
         notes: [root, (root + 3) % 12, (root + 6) % 12]
       };
+    default:
+      return null;
   }
 }
 
@@ -270,6 +275,10 @@ const $output = document.getElementsByTagName("output")[0];
 document.forms[0].addEventListener("submit", event => {
   event.preventDefault();
   const chord = parseChord($chord.value);
+  if (!chord) {
+    $output.innerHTML = 'invalid chord';
+    return;
+  }
   const chords = generateChords(tuning, frets, chord.notes);
   $output.innerHTML = '<h1>' + chord.name + '</h1>' + '<p>Formula: ' + chord.formula.join(', ') + '</p>' + chords.map(render).join("");
   $output.querySelectorAll('svg').forEach((el, i) => {
