@@ -2,14 +2,6 @@
 set -e
 export PATH=$PATH:node_modules/.bin
 
-ffmpeg() {
-    if hash avconv 2>/dev/null; then
-        avconv "$@"
-    else
-        command ffmpeg "$@"
-    fi
-}
-
 mkdir -p public/images
 cp index.html chords.html public
 
@@ -30,6 +22,8 @@ svgo --input=images/logo.svg --output=public/images/logo.svg
 # Optimize sounds
 mkdir -p public/sounds
 for sound in sounds/*; do
+  ffmpeg -y -loglevel warning -i "$sound" -ac 1 -c pcm_s16le "public/${sound}"
   ffmpeg -y -loglevel warning -i "$sound" -ac 1 -c libvorbis "public/${sound/wav/webm}"
+  ffmpeg -y -loglevel warning -i "$sound" -ac 1 -c aac       "public/${sound/wav/m4a}"
 done
 sed -i -- 's/\.wav/\.webm/g' public/*.js

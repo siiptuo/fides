@@ -6,15 +6,23 @@ const frets = 22;
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const context = new AudioContext();
 
+const $audio = document.createElement('audio');
+
+const audioExtension = [
+  { mime: 'audio/webm; codecs=vorbis',   extension: 'webm' },
+  { mime: 'audio/mp4; codecs=mp4a.40.5', extension: 'm4a'  },
+  { mime: 'audio/wav; codecs=1',         extension: 'wav'  },
+].find(type => $audio.canPlayType(type.mime) === 'probably').extension;
+
 let stringSounds = [];
 
 [
-  'sounds/117677__kyster__e-open-string.wav',
-  'sounds/117673__kyster__a-open-string.wav',
-  'sounds/117676__kyster__d-open-string.wav',
-  'sounds/117678__kyster__g-open-string.wav',
-  'sounds/117674__kyster__b-open-string.wav',
-  'sounds/117679__kyster__e-open-string.wav',
+  `sounds/117677__kyster__e-open-string.${audioExtension}`,
+  `sounds/117673__kyster__a-open-string.${audioExtension}`,
+  `sounds/117676__kyster__d-open-string.${audioExtension}`,
+  `sounds/117678__kyster__g-open-string.${audioExtension}`,
+  `sounds/117674__kyster__b-open-string.${audioExtension}`,
+  `sounds/117679__kyster__e-open-string.${audioExtension}`,
 ].forEach((url, i) => fetch(url)
   .then(res => res.arrayBuffer())
   .then(buf => context.decodeAudioData(buf, buf => stringSounds[i] = buf)));
