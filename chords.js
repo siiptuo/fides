@@ -1,5 +1,5 @@
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const tuningMidi = [40, 45, 50, 55, 59, 64]
+const tuningMidi = [40, 45, 50, 55, 59, 64];
 const tuning = [4, 9, 2, 7, 11, 4];
 const frets = 22;
 
@@ -7,12 +7,12 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 const context = new AudioContext();
 
 function findFileExtension() {
-  const $audio = document.createElement('audio');
+  const $audio = document.createElement("audio");
   const item = [
-    { mime: 'audio/webm; codecs=vorbis',   extension: 'webm' },
-    { mime: 'audio/mp4; codecs=mp4a.40.5', extension: 'm4a'  },
-    { mime: 'audio/wav; codecs=1',         extension: 'wav'  },
-  ].find(type => $audio.canPlayType(type.mime) === 'probably');
+    { mime: "audio/webm; codecs=vorbis", extension: "webm" },
+    { mime: "audio/mp4; codecs=mp4a.40.5", extension: "m4a" },
+    { mime: "audio/wav; codecs=1", extension: "wav" }
+  ].find(type => $audio.canPlayType(type.mime) === "probably");
   return item && item.extension;
 }
 
@@ -26,10 +26,12 @@ if (audioExtension) {
     `sounds/117676__kyster__d-open-string.${audioExtension}`,
     `sounds/117678__kyster__g-open-string.${audioExtension}`,
     `sounds/117674__kyster__b-open-string.${audioExtension}`,
-    `sounds/117679__kyster__e-open-string.${audioExtension}`,
-  ].forEach((url, i) => fetch(url)
-    .then(res => res.arrayBuffer())
-    .then(buf => context.decodeAudioData(buf, buf => stringSounds[i] = buf)));
+    `sounds/117679__kyster__e-open-string.${audioExtension}`
+  ].forEach((url, i) =>
+    fetch(url)
+      .then(res => res.arrayBuffer())
+      .then(buf => context.decodeAudioData(buf, buf => (stringSounds[i] = buf)))
+  );
 }
 
 function midiToHertz(note) {
@@ -49,22 +51,25 @@ function playChord(chord) {
   chord.forEach((note, i) => {
     if (note >= 0) {
       setTimeout(() => {
-        playSound(stringSounds[i], midiToHertz(tuningMidi[i] + note) / midiToHertz(tuningMidi[i]));
+        playSound(
+          stringSounds[i],
+          midiToHertz(tuningMidi[i] + note) / midiToHertz(tuningMidi[i])
+        );
       }, 80 * (i - 1));
     }
   });
 }
 
 const modifierMap = {
-  "m": "minor",
-  "min": "minor",
+  m: "minor",
+  min: "minor",
   "": "major",
-  "M": "major",
-  "Ma": "major",
-  "Maj": "major",
+  M: "major",
+  Ma: "major",
+  Maj: "major",
   "+": "augmented",
-  "aug": "augmented",
-  "dim": "diminished",
+  aug: "augmented",
+  dim: "diminished"
 };
 
 function parseChord(input) {
@@ -76,25 +81,25 @@ function parseChord(input) {
   const root = notes.indexOf(note); // TODO: handle "b"
   const modifier = modifierMap[match[2]];
   switch (modifier) {
-    case 'minor':
+    case "minor":
       return {
         name: `${note} minor`,
         formula: [0, 3, 7],
-        notes: [root, (root + 3) % 12, (root + 7) % 12],
+        notes: [root, (root + 3) % 12, (root + 7) % 12]
       };
-    case 'major':
+    case "major":
       return {
         name: `${note} major`,
         formula: [0, 4, 7],
         notes: [root, (root + 4) % 12, (root + 7) % 12]
       };
-    case 'augmented':
+    case "augmented":
       return {
         name: `${note} augmented`,
         formula: [0, 4, 8],
         notes: [root, (root + 4) % 12, (root + 8) % 12]
       };
-    case 'diminished':
+    case "diminished":
       return {
         name: `${note} diminished`,
         formula: [0, 3, 6],
@@ -290,15 +295,22 @@ document.forms[0].addEventListener("submit", event => {
   event.preventDefault();
   const chord = parseChord($chord.value);
   if (!chord) {
-    $output.innerHTML = 'invalid chord';
+    $output.innerHTML = "invalid chord";
     return;
   }
   const chords = generateChords(tuning, frets, chord.notes);
-  $output.innerHTML = '<h1>' + chord.name + '</h1>' +
-    '<p>Notes: ' + chord.notes.map(note => notes[note]).join(', ') + '</p>' +
-    '<p>Integer notation: {' + chord.formula.join(', ') + '}</p>' +
+  $output.innerHTML =
+    "<h1>" +
+    chord.name +
+    "</h1>" +
+    "<p>Notes: " +
+    chord.notes.map(note => notes[note]).join(", ") +
+    "</p>" +
+    "<p>Integer notation: {" +
+    chord.formula.join(", ") +
+    "}</p>" +
     chords.map(render).join("");
-  $output.querySelectorAll('svg').forEach((el, i) => {
-    el.addEventListener('click', () => playChord(chords[i]));
+  $output.querySelectorAll("svg").forEach((el, i) => {
+    el.addEventListener("click", () => playChord(chords[i]));
   });
 });
