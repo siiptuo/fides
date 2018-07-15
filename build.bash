@@ -6,7 +6,7 @@ mkdir -p public/images
 cp index.html chords.html public
 
 # Minify CSS
-cleancss -o public/style.css style.css
+cleancss style.css > public/style.css
 
 # Compile and minify JavaScript
 babel ./*.js --out-dir public
