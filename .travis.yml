@@ -4,6 +4,7 @@ addons:
   apt:
     packages:
     - libav-tools
+    - jpegoptim
 before_deploy: ./build.bash
 deploy:
   provider: pages
