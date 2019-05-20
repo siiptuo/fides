@@ -15,6 +15,145 @@ const notes2 = [
   "A#",
   "B"
 ];
+const alphabet = ["C", "D", "E", "F", "G", "A", "B"];
+const notes3 = [
+  ["B♯", "C", "D♭♭"],
+  ["B♯♯", "C♯", "D♭"],
+  ["C♯♯", "D", "E♭♭"],
+  ["D♯", "E♭", "F♭♭"],
+  ["D♯♯", "E", "F♭"],
+  ["E♯", "F", "G♭♭"],
+  ["E♯♯", "F♯", "G♭"],
+  ["F♯♯", "G", "A♭♭"],
+  ["G♯", "A♭"],
+  ["G♯♯", "A", "B♭♭"],
+  ["A♯", "B♭", "C♭♭"],
+  ["A♯♯", "B", "C♭"]
+];
+
+function* combinations(scale, offset, string) {
+  if (scale.length == 0) {
+    yield string;
+  } else {
+    for (const note of notes3[(scale[0] + offset) % 12]) {
+      yield* combinations(scale.slice(1), offset, [...string, note]);
+    }
+  }
+}
+
+function argMax(it, fn) {
+  it = it[Symbol.iterator]();
+  const first = it.next().value;
+  let max = fn(first);
+  let values = [first];
+  for (const x of it) {
+    const m = fn(x);
+    if (m == max) {
+      values.push(x);
+    } else if (m > max) {
+      max = m;
+      values = [x];
+    }
+  }
+  return values;
+}
+
+function argMin(it, fn) {
+  return argMax(it, x => -fn(x));
+}
+
+function uniqueLetters(N) {
+  let sum = 0;
+  for (let i = 0; i < N.length - 1; i++) {
+    for (let j = i + 1; j < N.length; j++) {
+      if (N[i][0] === N[j][0]) {
+        sum++;
+      }
+    }
+  }
+  return N.length - sum;
+}
+
+function augmentedDimished(N) {
+  let sum = 0;
+  for (let i = 0; i < N.length - 1; i++) {
+    for (let j = i + 1; j < N.length; j++) {
+      const ci = alphabet.indexOf(N[i][0]);
+      const cj = alphabet.indexOf(N[j][0]);
+      const dc = ci >= cj ? ci - cj : ci - cj + alphabet.length;
+      const si = notes3.findIndex(n => n.includes(N[i]));
+      const sj = notes3.findIndex(n => n.includes(N[j]));
+      const ds = si >= sj ? si - sj : si - sj + notes3.length;
+      if (dc == 0) {
+        sum += 1;
+      } else if ((dc == 1 || dc == 2) && ds > 2 * dc) {
+        sum += ds - 2 * dc;
+      } else if (
+        (dc == 1 || dc == 2 || dc == 3 || dc == 4) &&
+        ds < 2 * dc - 1
+      ) {
+        sum += 2 * dc - 1 - ds;
+      } else if (
+        (dc == 3 || dc == 4 || dc == 5 || dc == 6) &&
+        ds > 2 * dc - 1
+      ) {
+        sum += ds - 2 * dc + 1;
+      } else if ((dc == 5 || dc == 6) && ds < 2 * dc - 2) {
+        sum += 2 * dc - 2 - ds;
+      }
+    }
+  }
+  return sum;
+}
+
+function naturals(N) {
+  return N.filter(n => n.length == 1).length;
+}
+
+function doubles(N) {
+  return N.filter(n => n.length == 3).length;
+}
+
+function between(N) {
+  let sum = 0;
+  for (let i = 0; i < N.length; i++) {
+    if (
+      N[i].length === 1 &&
+      N[(i + 2) % N.length].length === 1 &&
+      alphabet.indexOf(N[(i + 2) % N.length][0]) - alphabet.indexOf(N[i][0]) ===
+        1 &&
+      N[(i + 1) % N.length].length == 2 &&
+      N[(i + 1) % N.length][1] === "♯"
+    ) {
+      sum++;
+    }
+  }
+  return sum;
+}
+
+function spell(scale, offset, root) {
+  let candidates = combinations(scale, offset, [root]);
+
+  // phase 1
+  candidates = argMax(candidates, uniqueLetters);
+  if (candidates.length === 1) return candidates[0];
+
+  // phase 2
+  candidates = argMin(candidates, augmentedDimished);
+  if (candidates.length === 1) return candidates[0];
+
+  // phase 3
+  candidates = argMax(candidates, naturals);
+  if (candidates.length === 1) return candidates[0];
+
+  // phase 4
+  candidates = argMin(candidates, doubles);
+  if (candidates.length === 1) return candidates[0];
+
+  // phase 5
+  candidates = argMax(candidates, between);
+  return candidates[0];
+}
 
 function parseTuning(input) {
   return input.split("").map(i => notes2.indexOf(i));
@@ -83,6 +222,12 @@ function changeScale(scale, key, fretWidths, tuning) {
   for (let i = 0; i < scale.length; i++) {
     for (let fret of noteFretMap[(key + scale[i]) % 12]) {
       fret.classList.add("selected");
+    }
+  }
+  for (const note of spell(scale, key, notes[key])) {
+    const i = notes3.findIndex(n => n.includes(note));
+    for (const fret of noteFretMap[i]) {
+      fret.textContent = note;
     }
   }
 
