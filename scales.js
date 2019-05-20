@@ -74,114 +74,15 @@ function changeScale(scale, key, fretWidths, tuning) {
     document.getElementsByClassName("fretboard-fret-text")
   );
 
-  if (key !== lastKey && lastScale && equalArray(lastScale, scale)) {
-    let diff = key - lastKey;
-    if (diff > 6) {
-      diff -= 12;
-    } else if (diff < -6) {
-      diff += 12;
-    }
-    const newFretFretMap = [];
-    const newNoteFretMap = Array(12);
-    for (let i = 0; i < 12; i++) {
-      newNoteFretMap[i] = [];
-    }
-    const fretsToRemove = [];
-    setTimeout(function() {
-      for (let fret of fretsToRemove) {
-        fretboard.removeChild(fret);
-      }
-    }, 1000);
-
-    for (let i = 0; i < fretFretMap.length; i++) {
-      newFretFretMap[i + diff] = [];
-      for (let fret of fretFretMap[i]) {
-        let sum = 0;
-        if (i + diff < 0) {
-          sum = 5 * (i + diff);
-          fretsToRemove.push(fret);
-          fret.classList.remove("selected");
-        } else if (i + diff > fretWidths.length - 2) {
-          sum = 100 + 5 * (i + diff - fretWidths.length);
-          fretsToRemove.push(fret);
-          fret.classList.remove("selected");
-        } else {
-          for (let j = 0; j < i + diff; j++) {
-            sum += fretWidths[j];
-          }
-          sum += fretWidths[i + diff] / 2;
-          newFretFretMap[i + diff].push(fret);
-
-          const currentNote = notes.indexOf(fret.textContent);
-          const newNote = mod(currentNote + diff, 12);
-          newNoteFretMap[newNote].push(fret);
-          fret.textContent = notes[newNote];
-        }
-        const translates = fret.style.transform.split(" ");
-        translates[0] = `translateX(${sum * 9.6}px)`;
-        fret.style.transform = translates.join(" ");
-      }
-    }
-
-    function createFrets(from, to, startX) {
-      let sum = 0;
-      for (let i = 0; i < from; i++) {
-        sum += fretWidths[i];
-      }
-      for (let i = from; i < to; i++) {
-        newFretFretMap[i] = [];
-        for (let j = 0; j < tuning.length; j++) {
-          const noteIndex = (tuning[tuning.length - 1 - j] + i) % 12;
-          const note = notes[noteIndex];
-
-          const fret = fretboard.appendChild(document.createElement("div"));
-          fret.className = "fretboard-fret-text";
-          const y = 0.25 + 2 * j + "em";
-          let x = 0;
-          if (startX === 0) {
-            x = 5 * (i - to);
-          } else {
-            x = 100 + 5 * (i - from);
-          }
-          fret.style.transform = `translate(${x *
-            9.6}px, ${y}) translateX(-50%)`;
-          fret.textContent = note;
-
-          newFretFretMap[i].push(fret);
-          newNoteFretMap[noteIndex].push(fret);
-
-          window.getComputedStyle(fret).transform;
-
-          const noteInScale = mod(noteIndex - key, 12);
-          if (noteIndex === key || scale.includes(noteInScale)) {
-            fret.classList.add("selected");
-          }
-          fret.style.transform = `translateX(${(sum + fretWidths[i] / 2) *
-            9.6}px) translateY(${y}) translateX(-50%)`;
-        }
-        sum += fretWidths[i];
-      }
-    }
-
-    if (diff < 0) {
-      createFrets(fretWidths.length + diff - 1, fretWidths.length - 1, 100);
-    } else if (diff > 0) {
-      createFrets(0, diff, 0);
-    }
-
-    noteFretMap = newNoteFretMap;
-    fretFretMap = newFretFretMap;
-  } else {
-    for (var fret of frets) {
-      fret.classList.remove("selected");
-    }
-    for (let fret of noteFretMap[key]) {
+  for (var fret of frets) {
+    fret.classList.remove("selected");
+  }
+  for (let fret of noteFretMap[key]) {
+    fret.classList.add("selected");
+  }
+  for (let i = 0; i < scale.length; i++) {
+    for (let fret of noteFretMap[(key + scale[i]) % 12]) {
       fret.classList.add("selected");
-    }
-    for (let i = 0; i < scale.length; i++) {
-      for (let fret of noteFretMap[(key + scale[i]) % 12]) {
-        fret.classList.add("selected");
-      }
     }
   }
 
