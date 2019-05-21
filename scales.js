@@ -16,6 +16,7 @@ const notes2 = [
   "B"
 ];
 const alphabet = ["C", "D", "E", "F", "G", "A", "B"];
+const alphabetPitches = [0, 2, 4, 5, 7, 9, 11];
 const notes3 = [
   ["B♯", "C", "D♭♭"],
   ["B♯♯", "C♯", "D♭"],
@@ -31,12 +32,83 @@ const notes3 = [
   ["A♯♯", "B", "C♭"]
 ];
 
-function* combinations(scale, offset, string) {
-  if (scale.length == 0) {
-    yield string;
+class Pitch {
+  static listPitchClass(pitchClass) {
+    return notes3[pitchClass].map(n => new Pitch(n));
+  }
+
+  constructor(name) {
+    this.letter = alphabet.indexOf(name[0]);
+    if (name.length === 1) {
+      this.modifier = 0;
+    } else if (name.length === 2) {
+      if (name[1] === "♯") {
+        this.modifier = 1;
+      } else if (name[1] === "♭") {
+        this.modifier = -1;
+      }
+    } else if (name.length == 3) {
+      if (name[1] === "♯" && name[2] === "♯") {
+        this.modifier = 2;
+      } else if (name[1] === "♭" && name[2] === "♭") {
+        this.modifier = -2;
+      }
+    }
+  }
+
+  isDoubleFlat() {
+    return this.modifier === -2;
+  }
+
+  isFlat() {
+    return this.modifier === -1;
+  }
+
+  isNatural() {
+    return this.modifier === 0;
+  }
+
+  isSharp() {
+    return this.modifier === 1;
+  }
+
+  isDoubleSharp() {
+    return this.modifier === 2;
+  }
+
+  getLetter() {
+    return this.letter;
+  }
+
+  getPitchClass() {
+    return (alphabetPitches[this.letter] + this.modifier) % 12;
+  }
+
+  toString() {
+    if (this.isDoubleFlat()) {
+      return alphabet[this.letter] + "♭♭";
+    }
+    if (this.isFlat()) {
+      return alphabet[this.letter] + "♭";
+    }
+    if (this.isNatural()) {
+      return alphabet[this.letter];
+    }
+    if (this.isSharp()) {
+      return alphabet[this.letter] + "♯";
+    }
+    if (this.isDoubleSharp()) {
+      return alphabet[this.letter] + "♯♯";
+    }
+  }
+}
+
+function* combinations(pitches, initial) {
+  if (pitches.length == 0) {
+    yield initial;
   } else {
-    for (const note of notes3[(scale[0] + offset) % 12]) {
-      yield* combinations(scale.slice(1), offset, [...string, note]);
+    for (const pitch of Pitch.listPitchClass(pitches[0])) {
+      yield* combinations(pitches.slice(1), [...initial, pitch]);
     }
   }
 }
@@ -66,7 +138,7 @@ function uniqueLetters(N) {
   let sum = 0;
   for (let i = 0; i < N.length - 1; i++) {
     for (let j = i + 1; j < N.length; j++) {
-      if (N[i][0] === N[j][0]) {
+      if (N[i].getLetter() === N[j].getLetter()) {
         sum++;
       }
     }
@@ -78,11 +150,11 @@ function augmentedDimished(N) {
   let sum = 0;
   for (let i = 0; i < N.length - 1; i++) {
     for (let j = i + 1; j < N.length; j++) {
-      const ci = alphabet.indexOf(N[i][0]);
-      const cj = alphabet.indexOf(N[j][0]);
+      const ci = N[i].getLetter();
+      const cj = N[j].getLetter();
       const dc = ci >= cj ? ci - cj : ci - cj + alphabet.length;
-      const si = notes3.findIndex(n => n.includes(N[i]));
-      const sj = notes3.findIndex(n => n.includes(N[j]));
+      const si = N[i].getPitchClass();
+      const sj = N[j].getPitchClass();
       const ds = si >= sj ? si - sj : si - sj + notes3.length;
       if (dc == 0) {
         sum += 1;
@@ -107,23 +179,21 @@ function augmentedDimished(N) {
 }
 
 function naturals(N) {
-  return N.filter(n => n.length == 1).length;
+  return N.filter(n => n.isNatural()).length;
 }
 
 function doubles(N) {
-  return N.filter(n => n.length == 3).length;
+  return N.filter(n => n.isDoubleFlat() || n.isDoubleSharp()).length;
 }
 
 function between(N) {
   let sum = 0;
   for (let i = 0; i < N.length; i++) {
     if (
-      N[i].length === 1 &&
-      N[(i + 2) % N.length].length === 1 &&
-      alphabet.indexOf(N[(i + 2) % N.length][0]) - alphabet.indexOf(N[i][0]) ===
-        1 &&
-      N[(i + 1) % N.length].length == 2 &&
-      N[(i + 1) % N.length][1] === "♯"
+      N[i].isNatural() &&
+      N[(i + 2) % N.length].isNatural() &&
+      N[(i + 2) % N.length].getLetter() - N[i].getLetter() === 1 &&
+      N[(i + 1) % N.length].isSharp()
     ) {
       sum++;
     }
@@ -131,24 +201,35 @@ function between(N) {
   return sum;
 }
 
-function spell(scale, offset, root) {
-  let candidates = combinations(scale, offset, [root]);
+function spellScale(scale, root) {
+  let candidates = combinations(
+    scale.map(pitchClass => (root.getPitchClass() + pitchClass) % 12),
+    [root]
+  );
 
   // phase 1
   candidates = argMax(candidates, uniqueLetters);
-  if (candidates.length === 1) return candidates[0];
+  if (candidates.length === 1) {
+    return candidates[0];
+  }
 
   // phase 2
   candidates = argMin(candidates, augmentedDimished);
-  if (candidates.length === 1) return candidates[0];
+  if (candidates.length === 1) {
+    return candidates[0];
+  }
 
   // phase 3
   candidates = argMax(candidates, naturals);
-  if (candidates.length === 1) return candidates[0];
+  if (candidates.length === 1) {
+    return candidates[0];
+  }
 
   // phase 4
   candidates = argMin(candidates, doubles);
-  if (candidates.length === 1) return candidates[0];
+  if (candidates.length === 1) {
+    return candidates[0];
+  }
 
   // phase 5
   candidates = argMax(candidates, between);
@@ -212,22 +293,15 @@ function changeScale(scale, key, fretWidths, tuning) {
   const frets = Array.from(
     document.getElementsByClassName("fretboard-fret-text")
   );
-
-  for (var fret of frets) {
+  for (const fret of frets) {
     fret.classList.remove("selected");
   }
-  for (let fret of noteFretMap[key]) {
-    fret.classList.add("selected");
-  }
-  for (let i = 0; i < scale.length; i++) {
-    for (let fret of noteFretMap[(key + scale[i]) % 12]) {
+
+  const pitches = spellScale(scale, new Pitch(notes[key]));
+  for (const pitch of pitches) {
+    for (let fret of noteFretMap[pitch.getPitchClass()]) {
       fret.classList.add("selected");
-    }
-  }
-  for (const note of spell(scale, key, notes[key])) {
-    const i = notes3.findIndex(n => n.includes(note));
-    for (const fret of noteFretMap[i]) {
-      fret.textContent = note;
+      fret.textContent = pitch;
     }
   }
 
