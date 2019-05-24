@@ -1,4 +1,4 @@
-"use strict";
+import "./style.css";
 
 const notes = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
 const notes2 = [

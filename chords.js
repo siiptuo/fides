@@ -1,3 +1,14 @@
+import "./style.css";
+
+const sounds = [
+  require("./sounds/117677__kyster__e-open-string.wav"),
+  require("./sounds/117673__kyster__a-open-string.wav"),
+  require("./sounds/117676__kyster__d-open-string.wav"),
+  require("./sounds/117678__kyster__g-open-string.wav"),
+  require("./sounds/117674__kyster__b-open-string.wav"),
+  require("./sounds/117679__kyster__e-open-string.wav")
+];
+
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const tuningMidi = [40, 45, 50, 55, 59, 64];
 const tuning = [4, 9, 2, 7, 11, 4];
@@ -20,15 +31,8 @@ const audioExtension = findFileExtension();
 const stringSounds = [];
 
 if (audioExtension) {
-  [
-    `sounds/117677__kyster__e-open-string.${audioExtension}`,
-    `sounds/117673__kyster__a-open-string.${audioExtension}`,
-    `sounds/117676__kyster__d-open-string.${audioExtension}`,
-    `sounds/117678__kyster__g-open-string.${audioExtension}`,
-    `sounds/117674__kyster__b-open-string.${audioExtension}`,
-    `sounds/117679__kyster__e-open-string.${audioExtension}`
-  ].forEach((url, i) =>
-    fetch(url)
+  sounds.forEach((urls, i) =>
+    fetch(urls[audioExtension])
       .then(res => res.arrayBuffer())
       .then(buf => context.decodeAudioData(buf, buf => (stringSounds[i] = buf)))
   );

@@ -1,4 +1,5 @@
 {
-  "presets": [["env", { "exclude": ["transform-regenerator"] }]],
-  "plugins": ["transform-object-rest-spread"]
+  presets: [
+    ["@babel/preset-env", { exclude: ["@babel/plugin-transform-regenerator"] }]
+  ]
 }
