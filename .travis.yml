@@ -6,12 +6,11 @@ addons:
     - sourceline: 'ppa:mc3man/trusty-media'
     packages:
     - ffmpeg
-    - jpegoptim
-before_deploy: ./build.bash
+script: npm run build
+before_deploy: npm install -g netlify-cli
 deploy:
-  provider: pages
-  local-dir: public
+  provider: script
+  script: netlify deploy --dir=public --prod
   skip_cleanup: true
-  github-token: $GITHUB_TOKEN
   on:
     branch: master
