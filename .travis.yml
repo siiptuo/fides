@@ -7,7 +7,9 @@ addons:
     packages:
     - ffmpeg
 script: npm run build
-before_deploy: npm install -g netlify-cli
+before_deploy:
+  - npm install -g netlify-cli
+  - cp _headers public
 deploy:
   provider: script
   script: netlify deploy --dir=public --prod --message="$TRAVIS_COMMIT"
