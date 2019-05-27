@@ -1,4 +1,4 @@
-import { Pitch } from './pitch.js';
+import { Pitch } from "./pitch.js";
 
 function* combinations(pitches, initial) {
   if (pitches.length == 0) {

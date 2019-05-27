@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>Scales - Fides</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+      integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <header>
       <div class="header">
-        <img src="<%= require('./images/logo.svg') %>" alt="Fides">
+        <img src="<%= require('./images/logo.svg') %>" alt="Fides" />
         <nav>
           <ul>
             <li class="current"><a href="index.html">Scales</a></li>
@@ -25,57 +30,66 @@
       </div>
     </header>
     <main>
-    <form>
-      <label>
-        Key:
-        <select name="key">
-          <option value="0">C</option>
-          <option value="1">C♯</option>
-          <option value="2">D</option>
-          <option value="3">D♯</option>
-          <option value="4">E</option>
-          <option value="5">F</option>
-          <option value="6">F♯</option>
-          <option value="7">G</option>
-          <option value="8">G♯</option>
-          <option value="9">A</option>
-          <option value="10">A♯</option>
-          <option value="11">B</option>
-        </select>
-      </label>
-      <label>
-        Scale:
-        <select name="scale">
-          <option value="2,4,5,7,9,11">Major</option>
-          <option value="2,3,5,7,8,10">Minor</option>
-          <option value="2,4,7,9">Major pentatonic</option>
-          <option value="3,5,7,10">Minor pentatonic</option>
-        </select>
-      </label>
-      <label>
-        Tuning:
-        <select name="tuning">
-          <optgroup label="6-string guitar">
-            <option value="EADGBE">Standard E</option>
-            <option value="DADGBE">Drop D</option>
-            <option value="DGCFAD">Standard D</option>
-          </optgroup>
-          <optgroup label="7-string guitar">
-            <option value="BEADGBE">Standard B</option>
-          </optgroup>
-          <optgroup label="4-string bass">
-            <option value="EADG">Standard E</option>
-          </optgroup>
-          <optgroup label="5-string bass">
-            <option value="BEADG">Standard B</option>
-          </optgroup>
-        </select>
-      </label>
-      <label>
-        Frets:
-        <input name="frets" type="number" value="22" min="8" max="32" step="1" size="2" maxLength="2">
-      </label>
-    </form>
+      <form>
+        <label>
+          Key:
+          <select name="key">
+            <option value="0">C</option>
+            <option value="1">C♯</option>
+            <option value="2">D</option>
+            <option value="3">D♯</option>
+            <option value="4">E</option>
+            <option value="5">F</option>
+            <option value="6">F♯</option>
+            <option value="7">G</option>
+            <option value="8">G♯</option>
+            <option value="9">A</option>
+            <option value="10">A♯</option>
+            <option value="11">B</option>
+          </select>
+        </label>
+        <label>
+          Scale:
+          <select name="scale">
+            <option value="2,4,5,7,9,11">Major</option>
+            <option value="2,3,5,7,8,10">Minor</option>
+            <option value="2,4,7,9">Major pentatonic</option>
+            <option value="3,5,7,10">Minor pentatonic</option>
+          </select>
+        </label>
+        <label>
+          Tuning:
+          <select name="tuning">
+            <optgroup label="6-string guitar">
+              <option value="EADGBE">Standard E</option>
+              <option value="DADGBE">Drop D</option>
+              <option value="DGCFAD">Standard D</option>
+            </optgroup>
+            <optgroup label="7-string guitar">
+              <option value="BEADGBE">Standard B</option>
+            </optgroup>
+            <optgroup label="4-string bass">
+              <option value="EADG">Standard E</option>
+            </optgroup>
+            <optgroup label="5-string bass">
+              <option value="BEADG">Standard B</option>
+            </optgroup>
+          </select>
+        </label>
+        <label>
+          Frets:
+          <input
+            name="frets"
+            type="number"
+            value="22"
+            min="8"
+            max="32"
+            step="1"
+            size="2"
+            maxlength="2"
+          />
+        </label>
+      </form>
     </main>
   </body>
 </html>

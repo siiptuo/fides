@@ -1,6 +1,6 @@
 import "./style.css";
-import { Pitch } from './pitch.js';
-import { spellScale } from './scale.js';
+import { Pitch } from "./pitch.js";
+import { spellScale } from "./scale.js";
 
 const notes = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
 const notes2 = [
