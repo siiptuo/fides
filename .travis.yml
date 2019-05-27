@@ -10,7 +10,7 @@ script: npm run build
 before_deploy: npm install -g netlify-cli
 deploy:
   provider: script
-  script: netlify deploy --dir=public --prod
+  script: netlify deploy --dir=public --prod --message="$TRAVIS_COMMIT"
   skip_cleanup: true
   on:
     branch: master
