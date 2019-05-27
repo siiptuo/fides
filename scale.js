@@ -1,21 +1,23 @@
+// Scale spelling algorithm is based on Bora, Uzay & Tezel, Barış & Vahaplar,
+// Alper.  (2018). An Algorithm for Spelling the Pitches of Any Musical Scale.
+// Information Sciences. 10.1016/j.ins.2018.09.015.  Preprint of the paper is
+// available at https://www.researchgate.net/publication/327567188_An_Algorithm_for_Spelling_the_Pitches_of_Any_Musical_Scale.
+//
+// The basic idea of the algorithm is generating all possible spellings and
+// then filtering them using five different criteria until there's one
+// remaining (or more in special cases). The algorithm favors diatonicism over
+// chromaticism (using as many unique letters as possible) and thus certain
+// scales such as the blues scale may be consider incorrectly spelled.
+
 import { Pitch } from "./pitch.js";
 
-function* combinations(pitches, initial) {
-  if (pitches.length == 0) {
-    yield initial;
-  } else {
-    for (const pitch of Pitch.listPitchClass(pitches[0])) {
-      yield* combinations(pitches.slice(1), [...initial, pitch]);
-    }
-  }
-}
-
-function argMax(it, fn) {
-  it = it[Symbol.iterator]();
-  const first = it.next().value;
+// Return elements from `iterable` for which `fn` returns the maximum value.
+function argMax(iterable, fn) {
+  const iterator = iterable[Symbol.iterator]();
+  const first = iterator.next().value;
   let max = fn(first);
   let values = [first];
-  for (const x of it) {
+  for (const x of iterator) {
     const m = fn(x);
     if (m == max) {
       values.push(x);
@@ -27,10 +29,23 @@ function argMax(it, fn) {
   return values;
 }
 
-function argMin(it, fn) {
-  return argMax(it, x => -fn(x));
+// Return elements from `iterable` for which `fn` returns the minimum value.
+function argMin(iterable, fn) {
+  return argMax(iterable, x => -fn(x));
 }
 
+// Generate all possible spellings for `pitches`.
+function* combinations(pitches, initial) {
+  if (pitches.length == 0) {
+    yield initial;
+  } else {
+    for (const pitch of Pitch.listPitchClass(pitches[0])) {
+      yield* combinations(pitches.slice(1), [...initial, pitch]);
+    }
+  }
+}
+
+// Measure unique letters in pitch sequence.
 function uniqueLetters(N) {
   let sum = 0;
   for (let i = 0; i < N.length - 1; i++) {
@@ -43,7 +58,8 @@ function uniqueLetters(N) {
   return N.length - sum;
 }
 
-function augmentedDimished(N) {
+// Minimize the augmented and diminished intervals.
+function augmentedDiminished(N) {
   let sum = 0;
   for (let i = 0; i < N.length - 1; i++) {
     for (let j = i + 1; j < N.length; j++) {
@@ -75,14 +91,17 @@ function augmentedDimished(N) {
   return sum;
 }
 
+// Count naturals.
 function naturals(N) {
   return N.filter(n => n.isNatural()).length;
 }
 
+// Count double flats and sharps.
 function doubles(N) {
   return N.filter(n => n.isDoubleFlat() || n.isDoubleSharp()).length;
 }
 
+// Prefer sharps between naturals.
 function between(N) {
   let sum = 0;
   for (let i = 0; i < N.length; i++) {
@@ -98,6 +117,7 @@ function between(N) {
   return sum;
 }
 
+// Spell scale.
 export function spellScale(scale, root) {
   let candidates = combinations(
     scale.map(pitchClass => (root.getPitchClass() + pitchClass) % 12),
@@ -111,7 +131,7 @@ export function spellScale(scale, root) {
   }
 
   // phase 2
-  candidates = argMin(candidates, augmentedDimished);
+  candidates = argMin(candidates, augmentedDiminished);
   if (candidates.length === 1) {
     return candidates[0];
   }
