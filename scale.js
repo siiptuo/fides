@@ -7,7 +7,7 @@
 // then filtering them using five different criteria until there's one
 // remaining (or more in special cases). The algorithm favors diatonicism over
 // chromaticism (using as many unique letters as possible) and thus certain
-// scales such as the blues scale may be consider incorrectly spelled.
+// scales, such as the blues scale, may be considered incorrectly spelled.
 
 import { Pitch } from "./pitch.js";
 
