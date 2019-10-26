@@ -46,6 +46,15 @@ module.exports = {
         ]
       },
       {
+        test: /\.ico$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: { name: "[contenthash:20].[ext]" }
+          }
+        ]
+      },
+      {
         test: /\.wav$/,
         use: [
           {
