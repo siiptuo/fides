@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="shortcut icon" href="<%= require('../favicon.ico') %>">
+    <link rel="shortcut icon" href="<%= require('../favicon.ico') %>" />
     <title>Euclidean rhythm - Fides</title>
     <link
       rel="stylesheet"
@@ -20,7 +20,11 @@
   <body>
     <header>
       <ul>
-        <li><a href="index.html"><img src="<%= require('../images/logo.svg') %>" alt="Fides" /></a></li>
+        <li>
+          <a href="index.html">
+            <img src="<%= require('../images/logo.svg') %>" alt="Fides" />
+          </a>
+        </li>
         <li><a>Euclidean rhythm</a></li>
         <li>
           <a href="https://github.com/siiptuo/fides" target="_blank">
@@ -33,9 +37,13 @@
     <main>
       <svg width="200px" height="200px"></svg>
       <div>
-        <label>k=<input type="number" name="k" min="0" max="8" value="3"></label>
-        <label>n=<input type="number" name="n" min="1" value="8"></label>
-        <label>bpm=<input type="number" name="bpm" min="1" value="120"></label>
+        <label>
+          k=<input type="number" name="k" min="0" max="8" value="3" />
+        </label>
+        <label> n=<input type="number" name="n" min="1" value="8" /> </label>
+        <label>
+          bpm=<input type="number" name="bpm" min="1" value="120" />
+        </label>
         <button>Play</button>
       </div>
     </main>

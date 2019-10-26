@@ -1,4 +1,8 @@
-const { euclideanRhythm, distanceSequence, subsets } = require("./euclidean-rhythm");
+const {
+  euclideanRhythm,
+  distanceSequence,
+  subsets
+} = require("./euclidean-rhythm");
 
 class Element {
   constructor(element) {
@@ -47,7 +51,7 @@ function playSample(sample) {
 
 const sounds = [
   require("./158957__carlmartin__djembe-hit-13-hi-rim.wav"),
-  require("./158958__carlmartin__djembe-hit-2-hi-rim.wav"),
+  require("./158958__carlmartin__djembe-hit-2-hi-rim.wav")
 ];
 
 function findFileExtension() {
@@ -168,6 +172,6 @@ function create(rhythm) {
 $k.setAttribute("max", +$n.value);
 $k.value = Math.min(+$k.value, +$n.value);
 let currentRhythm = euclideanRhythm(+$k.value, +$n.value);
-console.log('(' + distanceSequence(currentRhythm).join() + ')');
-console.log('{' + subsets(currentRhythm).join() + '}_' + currentRhythm.length);
+console.log("(" + distanceSequence(currentRhythm).join() + ")");
+console.log("{" + subsets(currentRhythm).join() + "}_" + currentRhythm.length);
 create(currentRhythm);

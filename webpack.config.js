@@ -87,7 +87,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "index.html",
-      filename: "index.html",
+      filename: "index.html"
     }),
     new HtmlWebpackPlugin({
       template: "scales.html",
@@ -101,7 +101,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: "euclidean-rhythm/index.html",
-      filename: "euclidean-rhythm.html",
+      filename: "euclidean-rhythm.html"
     }),
     new MiniCssExtractPlugin({ filename: "[contenthash].css" })
   ]
