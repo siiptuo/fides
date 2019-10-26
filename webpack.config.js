@@ -7,7 +7,8 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 module.exports = {
   entry: {
     scales: "./scales.js",
-    chords: "./chords.js"
+    chords: "./chords.js",
+    euclideanRhythm: "./euclidean-rhythm/index.js"
   },
   output: {
     filename: "[contenthash].js",
@@ -78,12 +79,20 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "index.html",
       filename: "index.html",
+    }),
+    new HtmlWebpackPlugin({
+      template: "scales.html",
+      filename: "scales.html",
       chunks: ["scales"]
     }),
     new HtmlWebpackPlugin({
       template: "chords.html",
       filename: "chords.html",
       chunks: ["chords"]
+    }),
+    new HtmlWebpackPlugin({
+      template: "euclidean-rhythm/index.html",
+      filename: "euclidean-rhythm.html",
     }),
     new MiniCssExtractPlugin({ filename: "[contenthash].css" })
   ]
