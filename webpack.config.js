@@ -9,8 +9,8 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
   entry: {
-    scales: "./scales.js",
-    chords: "./chords.js",
+    scales: "./scales/index.js",
+    chords: "./chords/index.js",
     "euclidean-rhythm": "./euclidean-rhythm/index.js",
     "fibonacci-lfsr": "./fibonacci-lfsr/index.js"
   },
@@ -94,12 +94,12 @@ module.exports = {
       filename: "index.html"
     }),
     new HtmlWebpackPlugin({
-      template: "scales.html",
+      template: "scales/index.html",
       filename: "scales.html",
       chunks: ["scales"]
     }),
     new HtmlWebpackPlugin({
-      template: "chords.html",
+      template: "chords/index.html",
       filename: "chords.html",
       chunks: ["chords"]
     }),

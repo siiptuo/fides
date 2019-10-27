@@ -1,15 +1,15 @@
 // SPDX-FileCopyrightText: 2019 Tuomas Siipola
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import "./style.css";
+import "../style.css";
 
 const sounds = [
-  require("./sounds/117677__kyster__e-open-string.wav"),
-  require("./sounds/117673__kyster__a-open-string.wav"),
-  require("./sounds/117676__kyster__d-open-string.wav"),
-  require("./sounds/117678__kyster__g-open-string.wav"),
-  require("./sounds/117674__kyster__b-open-string.wav"),
-  require("./sounds/117679__kyster__e-open-string.wav")
+  require("../sounds/117677__kyster__e-open-string.wav"),
+  require("../sounds/117673__kyster__a-open-string.wav"),
+  require("../sounds/117676__kyster__d-open-string.wav"),
+  require("../sounds/117678__kyster__g-open-string.wav"),
+  require("../sounds/117674__kyster__b-open-string.wav"),
+  require("../sounds/117679__kyster__e-open-string.wav")
 ];
 
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
