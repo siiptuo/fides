@@ -11,7 +11,8 @@ module.exports = {
   entry: {
     scales: "./scales.js",
     chords: "./chords.js",
-    euclideanRhythm: "./euclidean-rhythm/index.js"
+    "euclidean-rhythm": "./euclidean-rhythm/index.js",
+    "fibonacci-lfsr": "./fibonacci-lfsr/index.js"
   },
   output: {
     filename: "[contenthash].js",
@@ -104,7 +105,13 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: "euclidean-rhythm/index.html",
-      filename: "euclidean-rhythm.html"
+      filename: "euclidean-rhythm.html",
+      chunks: ["euclidean-rhythm"]
+    }),
+    new HtmlWebpackPlugin({
+      template: "fibonacci-lfsr/index.html",
+      filename: "fibonacci-lfsr.html",
+      chunks: ["fibonacci-lfsr"]
     }),
     new MiniCssExtractPlugin({ filename: "[contenthash].css" })
   ]
