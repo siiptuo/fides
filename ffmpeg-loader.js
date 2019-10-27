@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2019 Tuomas Siipola
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 const { spawnSync } = require("child_process");
 const loaderUtils = require("loader-utils");
 

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2019 Tuomas Siipola
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 import "./style.css";
 import { Pitch } from "./pitch.js";
 import { spellScale } from "./scale.js";

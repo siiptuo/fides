@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2019 Tuomas Siipola
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 const alphabet = ["C", "D", "E", "F", "G", "A", "B"];
 const alphabetPitches = [0, 2, 4, 5, 7, 9, 11];
 const notes = [

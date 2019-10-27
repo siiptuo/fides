@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2019 Tuomas Siipola
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // Scale spelling algorithm is based on Bora, Uzay & Tezel, Barış & Vahaplar,
 // Alper.  (2018). An Algorithm for Spelling the Pitches of Any Musical Scale.
 // Information Sciences. 10.1016/j.ins.2018.09.015.  Preprint of the paper is

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2019 Tuomas Siipola
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 function euclideanRhythm(k, n) {
   if (n <= 0) throw new Error("n must be positive");
   if (k < 0) throw new Error("k must not be negative");

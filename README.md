@@ -1,17 +1,16 @@
+<!--
+SPDX-FileCopyrightText: 2019 Tuomas Siipola
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Fides
 
 [![Build Status](https://travis-ci.org/siiptuo/fides.svg?branch=master)](https://travis-ci.org/siiptuo/fides)
+[![reuse compliant](https://reuse.software/badge/reuse-compliant.svg)](https://reuse.software)
 
-Fides is a web-based scale tool for stringed instruments.
+Fides is a website of miscellaneous utilities.
 
 ## License
 
-Source code is licensed under MIT.
-
-`fretboard.png` is based texture by
-[Luke.RUSTLTD](https://opengameart.org/content/5-wood-textures) released under
-[CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
-Sound files by
-[Kyster](https://freesound.org/search/?q=&f=grouping_pack%3A%227397_Open+nylon+strings+%22)
-relased under [CC-BY](http://creativecommons.org/licenses/by/3.0/).
+Source code is licensed under GNU GPLv3 or later.
+For license information of assets, see .reuse/dep5.
