@@ -23,7 +23,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --open",
-    "test": "mocha euclidean-rhythm/test.js"
+    "test": "mocha src/**/*.test.js"
   },
   "repository": {
     "type": "git",

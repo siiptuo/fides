@@ -9,11 +9,11 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
   entry: {
-    style: "./style.css",
-    scales: "./scales/index.js",
-    chords: "./chords/index.js",
-    "euclidean-rhythm": "./euclidean-rhythm/index.js",
-    "fibonacci-lfsr": "./fibonacci-lfsr/index.js"
+    style: "./src/style.css",
+    "guitar-scales": "./src/guitar-scales/index.js",
+    "guitar-chords": "./src/guitar-chords/index.js",
+    "euclidean-rhythm": "./src/euclidean-rhythm/index.js",
+    "fibonacci-lfsr": "./src/fibonacci-lfsr/index.js"
   },
   output: {
     filename: "[contenthash].js",
@@ -91,27 +91,27 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: "src/index.html",
       filename: "index.html",
       chunks: ["style"]
     }),
     new HtmlWebpackPlugin({
-      template: "scales/index.html",
-      filename: "scales.html",
-      chunks: ["scales"]
+      template: "src/guitar-scales/index.html",
+      filename: "guitar-scales.html",
+      chunks: ["guitar-scales"]
     }),
     new HtmlWebpackPlugin({
-      template: "chords/index.html",
-      filename: "chords.html",
-      chunks: ["chords"]
+      template: "src/guitar-chords/index.html",
+      filename: "guitar-chords.html",
+      chunks: ["guitar-chords"]
     }),
     new HtmlWebpackPlugin({
-      template: "euclidean-rhythm/index.html",
+      template: "src/euclidean-rhythm/index.html",
       filename: "euclidean-rhythm.html",
       chunks: ["euclidean-rhythm"]
     }),
     new HtmlWebpackPlugin({
-      template: "fibonacci-lfsr/index.html",
+      template: "src/fibonacci-lfsr/index.html",
       filename: "fibonacci-lfsr.html",
       chunks: ["fibonacci-lfsr"]
     }),

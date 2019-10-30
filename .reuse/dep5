@@ -6,12 +6,12 @@ Copyright: 2010 Luke.RUSTLTD
 License: CC0-1.0
 Comment: Based on https://opengameart.org/content/5-wood-textures
 
-Files: sounds/*__kyster__*-string.wav
+Files: src/guitar-chords/*__kyster__*-string.wav
 Copyright: 2011 Kyster
 License: CC-BY-3.0
 Comment: https://freesound.org/people/Kyster/packs/7397/
 
-Files: euclidean-rhythm/*.wav
+Files: src/euclidean-rhythm/*.wav
 Copyright: 2012 carlmartin
 License: CC0-1.0
 Comment: https://freesound.org/people/carlmartin/packs/9826/

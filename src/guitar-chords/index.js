@@ -12,12 +12,12 @@ const frets = 22;
 const stringSounds = [];
 
 [
-  require("../sounds/117677__kyster__e-open-string.wav"),
-  require("../sounds/117673__kyster__a-open-string.wav"),
-  require("../sounds/117676__kyster__d-open-string.wav"),
-  require("../sounds/117678__kyster__g-open-string.wav"),
-  require("../sounds/117674__kyster__b-open-string.wav"),
-  require("../sounds/117679__kyster__e-open-string.wav")
+  require("./117677__kyster__e-open-string.wav"),
+  require("./117673__kyster__a-open-string.wav"),
+  require("./117676__kyster__d-open-string.wav"),
+  require("./117678__kyster__g-open-string.wav"),
+  require("./117674__kyster__b-open-string.wav"),
+  require("./117679__kyster__e-open-string.wav")
 ].forEach((urls, i) => {
   fetchSample(urls, tuningMidi[i]).then(sample => (stringSounds[i] = sample));
 });
