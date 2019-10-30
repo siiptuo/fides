@@ -3,19 +3,9 @@
 
 language: node_js
 node_js: 'node'
+dist: bionic
 addons:
   apt:
-    sources:
-    - sourceline: 'ppa:mc3man/trusty-media'
     packages:
     - ffmpeg
 script: npm run build
-before_deploy:
-  - npm install -g netlify-cli
-  - cp _headers public
-deploy:
-  provider: script
-  script: netlify deploy --dir=public --prod --message="$TRAVIS_COMMIT"
-  skip_cleanup: true
-  on:
-    branch: master
