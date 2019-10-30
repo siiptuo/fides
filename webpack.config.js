@@ -9,6 +9,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
   entry: {
+    style: "./style.css",
     scales: "./scales/index.js",
     chords: "./chords/index.js",
     "euclidean-rhythm": "./euclidean-rhythm/index.js",
@@ -91,7 +92,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "index.html",
-      filename: "index.html"
+      filename: "index.html",
+      chunks: ["style"]
     }),
     new HtmlWebpackPlugin({
       template: "scales/index.html",
