@@ -16,8 +16,8 @@ Copyright: 2012 carlmartin
 License: CC0-1.0
 Comment: https://freesound.org/people/carlmartin/packs/9826/
 
-Files: images/logo.svg favicon.ico
-Copyright: 2018 Tuomas Siipola
+Files: images/logo.svg images/favicon.ico
+Copyright: 2019 Tuomas Siipola
 License: CC-BY-SA-4.0
 
 Files: *.html package*.json .babelrc
