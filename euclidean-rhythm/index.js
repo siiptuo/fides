@@ -3,82 +3,20 @@
 
 import "../style.css";
 
-const {
+import { Element } from "../utils/dom.js";
+import { fetchSample, playSample } from "../utils/audio.js";
+import {
   euclideanRhythm,
   distanceSequence,
   subsets
-} = require("./euclidean-rhythm");
+} from "./euclidean-rhythm.js";
 
-class Element {
-  constructor(element) {
-    this.element = element;
-  }
-
-  attr(name, value) {
-    this.element.setAttribute(name, value);
-    return this;
-  }
-
-  text(value) {
-    this.element.textContent = value;
-    return this;
-  }
-
-  clear() {
-    this.element.innerHTML = "";
-    return this;
-  }
-
-  append(tag) {
-    return new Element(
-      this.element.appendChild(
-        document.createElementNS(this.element.namespaceURI, tag)
-      )
-    );
-  }
-}
-
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const context = new AudioContext();
-
-function loadSample(url) {
-  return fetch(url)
-    .then(response => response.arrayBuffer())
-    .then(buffer => context.decodeAudioData(buffer));
-}
-
-function playSample(sample) {
-  const source = context.createBufferSource();
-  source.buffer = sample;
-  source.connect(context.destination);
-  source.start(0);
-}
-
-const sounds = [
-  require("./158957__carlmartin__djembe-hit-13-hi-rim.wav"),
-  require("./158958__carlmartin__djembe-hit-2-hi-rim.wav")
-];
-
-function findFileExtension() {
-  const $audio = document.createElement("audio");
-  const item = [
-    { mime: "audio/webm; codecs=vorbis", extension: "webm" },
-    { mime: "audio/mp4; codecs=mp4a.40.5", extension: "m4a" },
-    { mime: "audio/wav; codecs=1", extension: "wav" }
-  ].find(type => $audio.canPlayType(type.mime) === "probably");
-  return item && item.extension;
-}
-
-const audioExtension = findFileExtension();
 const samples = [];
 
-if (audioExtension) {
-  sounds.forEach((urls, i) =>
-    fetch(urls[audioExtension])
-      .then(res => res.arrayBuffer())
-      .then(buf => context.decodeAudioData(buf, buf => (samples[i] = buf)))
-  );
-}
+[
+  require("./158957__carlmartin__djembe-hit-13-hi-rim.wav"),
+  require("./158958__carlmartin__djembe-hit-2-hi-rim.wav")
+].forEach((urls, i) => fetchSample(urls).then(sample => (samples[i] = sample)));
 
 const $k = document.getElementsByName("k")[0];
 $k.addEventListener("change", event => {

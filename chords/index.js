@@ -2,66 +2,31 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import "../style.css";
-
-const sounds = [
-  require("../sounds/117677__kyster__e-open-string.wav"),
-  require("../sounds/117673__kyster__a-open-string.wav"),
-  require("../sounds/117676__kyster__d-open-string.wav"),
-  require("../sounds/117678__kyster__g-open-string.wav"),
-  require("../sounds/117674__kyster__b-open-string.wav"),
-  require("../sounds/117679__kyster__e-open-string.wav")
-];
+import { fetchSample, playSample } from "../utils/audio.js";
 
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const tuningMidi = [40, 45, 50, 55, 59, 64];
 const tuning = [4, 9, 2, 7, 11, 4];
 const frets = 22;
 
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const context = new AudioContext();
-
-function findFileExtension() {
-  const $audio = document.createElement("audio");
-  const item = [
-    { mime: "audio/webm; codecs=vorbis", extension: "webm" },
-    { mime: "audio/mp4; codecs=mp4a.40.5", extension: "m4a" },
-    { mime: "audio/wav; codecs=1", extension: "wav" }
-  ].find(type => $audio.canPlayType(type.mime) === "probably");
-  return item && item.extension;
-}
-
-const audioExtension = findFileExtension();
 const stringSounds = [];
 
-if (audioExtension) {
-  sounds.forEach((urls, i) =>
-    fetch(urls[audioExtension])
-      .then(res => res.arrayBuffer())
-      .then(buf => context.decodeAudioData(buf, buf => (stringSounds[i] = buf)))
-  );
-}
-
-function midiToHertz(note) {
-  return 2 ** ((note - 69) / 12) * 440;
-}
-
-function playSound(sound, rate) {
-  const source = context.createBufferSource();
-  source.buffer = sound;
-  source.playbackRate.value = rate;
-  source.connect(context.destination);
-  source.start(0);
-}
+[
+  require("../sounds/117677__kyster__e-open-string.wav"),
+  require("../sounds/117673__kyster__a-open-string.wav"),
+  require("../sounds/117676__kyster__d-open-string.wav"),
+  require("../sounds/117678__kyster__g-open-string.wav"),
+  require("../sounds/117674__kyster__b-open-string.wav"),
+  require("../sounds/117679__kyster__e-open-string.wav")
+].forEach((urls, i) => {
+  fetchSample(urls, tuningMidi[i]).then(sample => (stringSounds[i] = sample));
+});
 
 function playChord(chord) {
-  if (!audioExtension) return;
   chord.forEach((note, i) => {
     if (note >= 0) {
       setTimeout(() => {
-        playSound(
-          stringSounds[i],
-          midiToHertz(tuningMidi[i] + note) / midiToHertz(tuningMidi[i])
-        );
+        playSample(stringSounds[i], tuningMidi[i] + note);
       }, 80 * (i - 1));
     }
   });
