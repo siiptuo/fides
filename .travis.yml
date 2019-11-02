@@ -8,4 +8,6 @@ addons:
   apt:
     packages:
     - ffmpeg
-script: npm run build
+script:
+- npm test
+- npm run build
