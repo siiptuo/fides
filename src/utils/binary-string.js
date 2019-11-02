@@ -41,6 +41,11 @@ class BinaryString {
     return BinaryString.fromArray([...this.data, bit]);
   }
 
+  padStart(n) {
+    if (this.length() >= n) return this;
+    return BinaryString.withLength(n - this.length()).concat(this);
+  }
+
   slice(a, b) {
     return BinaryString.fromArray(this.data.slice(a, b));
   }

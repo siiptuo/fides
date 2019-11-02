@@ -4,6 +4,10 @@
 import {
   unaryEncode,
   unaryDecode,
+  binaryEncode,
+  binaryDecode,
+  vlqEncode,
+  vlqDecode,
   eliasGammaEncode,
   eliasGammaDecode,
   eliasDeltaEncode,
@@ -23,6 +27,8 @@ const $output = document.getElementsByTagName('output')[0];
 
 const encodeFn = {
   'unary': unaryEncode,
+  'binary': binaryEncode,
+  'vlq': vlqEncode,
   'elias-gamma': eliasGammaEncode,
   'elias-delta': eliasDeltaEncode,
   'elias-omega': eliasOmegaEncode,
@@ -30,6 +36,8 @@ const encodeFn = {
 
 const decodeFn = {
   'unary': unaryDecode,
+  'binary': binaryDecode,
+  'vlq': vlqDecode,
   'elias-gamma': eliasGammaDecode,
   'elias-delta': eliasDeltaDecode,
   'elias-omega': eliasOmegaDecode,

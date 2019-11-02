@@ -16,6 +16,45 @@ function unaryDecode(x) {
   return null;
 }
 
+function binaryEncode(x) {
+  const chunkSize = 8;
+  return BinaryString.fromInteger(x).padStart(chunkSize);
+}
+
+function binaryDecode(x) {
+  const chunkSize = 8;
+  if (x.length() < chunkSize) return null;
+  const code = x.slice(0, chunkSize);
+  return { integer: code.toInteger(), code };
+}
+
+function vlqEncode(x) {
+  const chunkSize = 8;
+  let binary = BinaryString.fromInteger(x);
+  const bits = (chunkSize - 1) * Math.ceil(binary.length() / (chunkSize - 1))
+  binary = binary.padStart(bits);
+  let output = BinaryString.withLength(0);
+  for (let i = 0; i < binary.length() - chunkSize; i += chunkSize - 1) {
+    output = output.append(1).concat(binary.slice(i, i + chunkSize - 1));
+  }
+  output = output.append(0).concat(binary.slice(-(chunkSize - 1)));
+  return output;
+}
+
+function vlqDecode(x) {
+  const chunkSize = 8;
+  let binary = BinaryString.withLength(0);
+  let i = 0;
+  while (x.at(i)) {
+    if (i + chunkSize > x.length()) return null;
+    binary = binary.concat(x.slice(i + 1, i + chunkSize));
+    i += chunkSize;
+  }
+  if (i + chunkSize > x.length()) return null;
+  binary = binary.concat(x.slice(i + 1, i + chunkSize));
+  return { integer: binary.toInteger(), code: x.slice(0, i + chunkSize) };
+}
+
 function eliasGammaEncode(x) {
   const b = BinaryString.fromInteger(x);
   const n = BinaryString.withLength(b.length() - 1);
@@ -102,6 +141,10 @@ function decodeSequence(decoder, string) {
 module.exports = {
   unaryEncode,
   unaryDecode,
+  binaryEncode,
+  binaryDecode,
+  vlqEncode,
+  vlqDecode,
   eliasGammaEncode,
   eliasGammaDecode,
   eliasDeltaEncode,
