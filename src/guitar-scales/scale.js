@@ -12,7 +12,7 @@
 // chromaticism (using as many unique letters as possible) and thus certain
 // scales, such as the blues scale, may be considered incorrectly spelled.
 
-import { Pitch } from "./pitch.js";
+import { Pitch } from './pitch.js';
 
 // Return elements from `iterable` for which `fn` returns the maximum value.
 function argMax(iterable, fn) {

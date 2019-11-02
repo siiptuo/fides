@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2019 Tuomas Siipola
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import "../style.css";
-import { fetchSample, playSample } from "../utils/audio.js";
+import '../style.css';
+import { fetchSample, playSample } from '../utils/audio.js';
 
-const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const tuningMidi = [40, 45, 50, 55, 59, 64];
 const tuning = [4, 9, 2, 7, 11, 4];
 const frets = 22;
@@ -12,12 +12,12 @@ const frets = 22;
 const stringSounds = [];
 
 [
-  require("./117677__kyster__e-open-string.wav"),
-  require("./117673__kyster__a-open-string.wav"),
-  require("./117676__kyster__d-open-string.wav"),
-  require("./117678__kyster__g-open-string.wav"),
-  require("./117674__kyster__b-open-string.wav"),
-  require("./117679__kyster__e-open-string.wav")
+  require('./117677__kyster__e-open-string.wav'),
+  require('./117673__kyster__a-open-string.wav'),
+  require('./117676__kyster__d-open-string.wav'),
+  require('./117678__kyster__g-open-string.wav'),
+  require('./117674__kyster__b-open-string.wav'),
+  require('./117679__kyster__e-open-string.wav'),
 ].forEach((urls, i) => {
   fetchSample(urls, tuningMidi[i]).then(sample => (stringSounds[i] = sample));
 });
@@ -33,15 +33,15 @@ function playChord(chord) {
 }
 
 const modifierMap = {
-  m: "minor",
-  min: "minor",
-  "": "major",
-  M: "major",
-  Ma: "major",
-  Maj: "major",
-  "+": "augmented",
-  aug: "augmented",
-  dim: "diminished"
+  'm': 'minor',
+  'min': 'minor',
+  '': 'major',
+  'M': 'major',
+  'Ma': 'major',
+  'Maj': 'major',
+  '+': 'augmented',
+  'aug': 'augmented',
+  'dim': 'diminished',
 };
 
 function parseChord(input) {
@@ -53,29 +53,29 @@ function parseChord(input) {
   const root = notes.indexOf(note); // TODO: handle "b"
   const modifier = modifierMap[match[2]];
   switch (modifier) {
-    case "minor":
+    case 'minor':
       return {
         name: `${note} minor`,
         formula: [0, 3, 7],
-        notes: [root, (root + 3) % 12, (root + 7) % 12]
+        notes: [root, (root + 3) % 12, (root + 7) % 12],
       };
-    case "major":
+    case 'major':
       return {
         name: `${note} major`,
         formula: [0, 4, 7],
-        notes: [root, (root + 4) % 12, (root + 7) % 12]
+        notes: [root, (root + 4) % 12, (root + 7) % 12],
       };
-    case "augmented":
+    case 'augmented':
       return {
         name: `${note} augmented`,
         formula: [0, 4, 8],
-        notes: [root, (root + 4) % 12, (root + 8) % 12]
+        notes: [root, (root + 4) % 12, (root + 8) % 12],
       };
-    case "diminished":
+    case 'diminished':
       return {
         name: `${note} diminished`,
         formula: [0, 3, 6],
-        notes: [root, (root + 3) % 12, (root + 6) % 12]
+        notes: [root, (root + 3) % 12, (root + 6) % 12],
       };
     default:
       return null;
@@ -108,14 +108,14 @@ function generateChord(tuning, frets, notes, usedNotes, fingering) {
         notes,
         { ...usedNotes, [tuning[string]]: true },
         [...fingering, 0]
-      )
+      ),
     ];
   }
 
   // Muted string
   fingerings = [
     ...fingerings,
-    ...generateChord(tuning, frets, notes, usedNotes, [...fingering, -1])
+    ...generateChord(tuning, frets, notes, usedNotes, [...fingering, -1]),
   ];
 
   // Fretted note
@@ -126,8 +126,8 @@ function generateChord(tuning, frets, notes, usedNotes, fingering) {
         ...fingerings,
         ...generateChord(tuning, frets, notes, { ...usedNotes, [note]: true }, [
           ...fingering,
-          fret
-        ])
+          fret,
+        ]),
       ];
     }
   }
@@ -147,8 +147,8 @@ function generateChords(tuning, frets, notes) {
           ...chords,
           ...generateChord(tuning, frets, notes, { [note]: true }, [
             ...Array(string).fill(-1),
-            fret
-          ])
+            fret,
+          ]),
         ];
       }
     }
@@ -183,7 +183,7 @@ function render(strings) {
       fontSize +
       '" text-anchor="end">' +
       startFret +
-      "</text>";
+      '</text>';
   }
   output += '<g transform="translate(' + fretWidth + ')">';
   for (let x = 0; x < strings.length; x++) {
@@ -255,34 +255,34 @@ function render(strings) {
         '" />';
     }
   }
-  output += "</g>";
-  output += "</svg>";
+  output += '</g>';
+  output += '</svg>';
   return output;
 }
 
-const $chord = document.getElementsByName("chord")[0];
-const $output = document.getElementsByTagName("output")[0];
+const $chord = document.getElementsByName('chord')[0];
+const $output = document.getElementsByTagName('output')[0];
 
-document.forms[0].addEventListener("submit", event => {
+document.forms[0].addEventListener('submit', event => {
   event.preventDefault();
   const chord = parseChord($chord.value);
   if (!chord) {
-    $output.innerHTML = "invalid chord";
+    $output.innerHTML = 'invalid chord';
     return;
   }
   const chords = generateChords(tuning, frets, chord.notes);
   $output.innerHTML =
-    "<h1>" +
+    '<h1>' +
     chord.name +
-    "</h1>" +
-    "<p>Notes: " +
-    chord.notes.map(note => notes[note]).join(", ") +
-    "</p>" +
-    "<p>Integer notation: {" +
-    chord.formula.join(", ") +
-    "}</p>" +
-    chords.map(render).join("");
-  $output.querySelectorAll("svg").forEach((el, i) => {
-    el.addEventListener("click", () => playChord(chords[i]));
+    '</h1>' +
+    '<p>Notes: ' +
+    chord.notes.map(note => notes[note]).join(', ') +
+    '</p>' +
+    '<p>Integer notation: {' +
+    chord.formula.join(', ') +
+    '}</p>' +
+    chords.map(render).join('');
+  $output.querySelectorAll('svg').forEach((el, i) => {
+    el.addEventListener('click', () => playChord(chords[i]));
   });
 });

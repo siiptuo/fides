@@ -1,21 +1,21 @@
 // SPDX-FileCopyrightText: 2019 Tuomas Siipola
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-const alphabet = ["C", "D", "E", "F", "G", "A", "B"];
+const alphabet = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const alphabetPitches = [0, 2, 4, 5, 7, 9, 11];
 const notes = [
-  ["B♯", "C", "D♭♭"],
-  ["B♯♯", "C♯", "D♭"],
-  ["C♯♯", "D", "E♭♭"],
-  ["D♯", "E♭", "F♭♭"],
-  ["D♯♯", "E", "F♭"],
-  ["E♯", "F", "G♭♭"],
-  ["E♯♯", "F♯", "G♭"],
-  ["F♯♯", "G", "A♭♭"],
-  ["G♯", "A♭"],
-  ["G♯♯", "A", "B♭♭"],
-  ["A♯", "B♭", "C♭♭"],
-  ["A♯♯", "B", "C♭"]
+  ['B♯', 'C', 'D♭♭'],
+  ['B♯♯', 'C♯', 'D♭'],
+  ['C♯♯', 'D', 'E♭♭'],
+  ['D♯', 'E♭', 'F♭♭'],
+  ['D♯♯', 'E', 'F♭'],
+  ['E♯', 'F', 'G♭♭'],
+  ['E♯♯', 'F♯', 'G♭'],
+  ['F♯♯', 'G', 'A♭♭'],
+  ['G♯', 'A♭'],
+  ['G♯♯', 'A', 'B♭♭'],
+  ['A♯', 'B♭', 'C♭♭'],
+  ['A♯♯', 'B', 'C♭'],
 ];
 
 export class Pitch {
@@ -28,15 +28,15 @@ export class Pitch {
     if (name.length === 1) {
       this.modifier = 0;
     } else if (name.length === 2) {
-      if (name[1] === "♯") {
+      if (name[1] === '♯') {
         this.modifier = 1;
-      } else if (name[1] === "♭") {
+      } else if (name[1] === '♭') {
         this.modifier = -1;
       }
     } else if (name.length == 3) {
-      if (name[1] === "♯" && name[2] === "♯") {
+      if (name[1] === '♯' && name[2] === '♯') {
         this.modifier = 2;
-      } else if (name[1] === "♭" && name[2] === "♭") {
+      } else if (name[1] === '♭' && name[2] === '♭') {
         this.modifier = -2;
       }
     }
@@ -72,19 +72,19 @@ export class Pitch {
 
   toString() {
     if (this.isDoubleFlat()) {
-      return alphabet[this.letter] + "♭♭";
+      return alphabet[this.letter] + '♭♭';
     }
     if (this.isFlat()) {
-      return alphabet[this.letter] + "♭";
+      return alphabet[this.letter] + '♭';
     }
     if (this.isNatural()) {
       return alphabet[this.letter];
     }
     if (this.isSharp()) {
-      return alphabet[this.letter] + "♯";
+      return alphabet[this.letter] + '♯';
     }
     if (this.isDoubleSharp()) {
-      return alphabet[this.letter] + "♯♯";
+      return alphabet[this.letter] + '♯♯';
     }
   }
 }

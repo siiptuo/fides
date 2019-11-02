@@ -23,7 +23,8 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --open",
-    "test": "mocha src/**/*.test.js"
+    "test": "mocha src/**/*.test.js",
+    "prettier": "prettier --write *.js src/**/*.{js,html}"
   },
   "repository": {
     "type": "git",

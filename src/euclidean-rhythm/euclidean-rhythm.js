@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 function euclideanRhythm(k, n) {
-  if (n <= 0) throw new Error("n must be positive");
-  if (k < 0) throw new Error("k must not be negative");
-  if (k > n) throw new Error("k must be less than or equal to n");
+  if (n <= 0) throw new Error('n must be positive');
+  if (k < 0) throw new Error('k must not be negative');
+  if (k > n) throw new Error('k must be less than or equal to n');
   if (k == 0) return new Array(n).fill(0);
   if (k == n) return new Array(n).fill(1);
   let A = new Array(k).fill([1]);
@@ -15,7 +15,7 @@ function euclideanRhythm(k, n) {
         ? [A.map((x, i) => x.concat(B[i])), B.slice(A.length)]
         : [
             A.slice(0, B.length).map((x, i) => x.concat(B[i])),
-            A.slice(B.length)
+            A.slice(B.length),
           ];
   } while (B.length > 1);
   return [...A, ...B].flat();

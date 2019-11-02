@@ -15,12 +15,12 @@ if (context.decodeAudioData.length !== 1) {
 }
 
 const extension = (() => {
-  const $audio = document.createElement("audio");
+  const $audio = document.createElement('audio');
   const item = [
-    { mime: "audio/webm; codecs=vorbis", extension: "webm" },
-    { mime: "audio/mp4; codecs=mp4a.40.5", extension: "m4a" },
-    { mime: "audio/wav; codecs=1", extension: "wav" }
-  ].find(type => $audio.canPlayType(type.mime) === "probably");
+    { mime: 'audio/webm; codecs=vorbis', extension: 'webm' },
+    { mime: 'audio/mp4; codecs=mp4a.40.5', extension: 'm4a' },
+    { mime: 'audio/wav; codecs=1', extension: 'wav' },
+  ].find(type => $audio.canPlayType(type.mime) === 'probably');
   return item && item.extension;
 })();
 

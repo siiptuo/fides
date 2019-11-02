@@ -12,13 +12,13 @@ class BinaryString {
     return BinaryString.fromArray(
       x
         .toString(2)
-        .split("")
+        .split('')
         .map(s => +s)
     );
   }
 
   static fromString(x) {
-    return BinaryString.fromArray(x.split("").map(s => +s));
+    return BinaryString.fromArray(x.split('').map(s => +s));
   }
 
   static withLength(n) {
@@ -54,7 +54,7 @@ class BinaryString {
   }
 
   toString() {
-    return this.data.join("");
+    return this.data.join('');
   }
 
   toInteger() {

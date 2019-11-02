@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2019 Tuomas Siipola
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-const { BinaryString } = require("../utils/binary-string.js");
+const { BinaryString } = require('../utils/binary-string.js');
 
 function unaryEncode(x) {
   return BinaryString.withLength(x).append(1);
@@ -28,7 +28,7 @@ function eliasGammaDecode(x) {
       if (i + i >= x.length()) break;
       return {
         integer: x.slice(i, i + i + 1).toInteger(),
-        code: x.slice(0, i + i + 1)
+        code: x.slice(0, i + i + 1),
       };
     }
   }
@@ -50,7 +50,7 @@ function eliasDeltaDecode(x) {
       .slice(result.code.length(), result.code.length() + result.integer - 1)
       .prepend(1)
       .toInteger(),
-    code: x.slice(0, result.code.length() + result.integer - 1)
+    code: x.slice(0, result.code.length() + result.integer - 1),
   };
 }
 
@@ -109,5 +109,5 @@ module.exports = {
   eliasOmegaEncode,
   eliasOmegaDecode,
   encodeSequence,
-  decodeSequence
+  decodeSequence,
 };

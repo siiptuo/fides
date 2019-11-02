@@ -20,6 +20,6 @@ Files: images/logo.svg images/favicon.ico
 Copyright: 2019 Tuomas Siipola
 License: CC-BY-SA-4.0
 
-Files: *.html package*.json .babelrc
+Files: *.html package*.json .babelrc .prettierrc.json
 Copyright: 2019 Tuomas Siipola
 License: GPL-3.0-or-later

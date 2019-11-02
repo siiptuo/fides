@@ -17,7 +17,7 @@ export class Element {
   }
 
   clear() {
-    this.element.innerHTML = "";
+    this.element.innerHTML = '';
     return this;
   }
 
