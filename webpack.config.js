@@ -13,7 +13,8 @@ module.exports = {
     "guitar-scales": "./src/guitar-scales/index.js",
     "guitar-chords": "./src/guitar-chords/index.js",
     "euclidean-rhythm": "./src/euclidean-rhythm/index.js",
-    "fibonacci-lfsr": "./src/fibonacci-lfsr/index.js"
+    "fibonacci-lfsr": "./src/fibonacci-lfsr/index.js",
+    "integer-codes": "./src/integer-codes/index.js"
   },
   output: {
     filename: "[contenthash].js",
@@ -114,6 +115,11 @@ module.exports = {
       template: "src/fibonacci-lfsr/index.html",
       filename: "fibonacci-lfsr.html",
       chunks: ["fibonacci-lfsr"]
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/integer-codes/index.html",
+      filename: "integer-codes.html",
+      chunks: ["integer-codes"]
     }),
     new MiniCssExtractPlugin({ filename: "[contenthash].css" })
   ]

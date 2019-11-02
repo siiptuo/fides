@@ -111,7 +111,7 @@ header li:last-child .fab {
 }
 
 select,
-input {
+input:not([type=checkbox]) {
   font: inherit;
   box-sizing: border-box;
   padding: 0;

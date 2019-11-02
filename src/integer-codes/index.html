@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="shortcut icon"
+      href="<%= require('../../images/favicon.ico') %>"
+    />
+    <title>Integer codes - Fides</title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+      integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+      crossorigin="anonymous"
+    />
+    <style>
+      output {
+        margin-top: 1rem;
+        overflow-x: auto;
+        font-family: monospace;
+        font-size: 16px;
+        background-color: #eee;
+        padding: 1rem;
+        border-radius: 2px;
+        text-align: center;
+        display: flex;
+      }
+      output > div:first-child {
+        margin-left: auto;
+      }
+      output > div:last-child {
+        margin-right: auto;
+      }
+      output > div:not(:first-child) {
+        margin-left: 4px;
+      }
+      .error {
+        color: red;
+      }
+      .code {
+      }
+      .integer {
+        font-family: sans-serif;
+        font-size: 10px;
+        border-top: 1px solid gray;
+        color: gray;
+      }
+      .error .integer {
+        color: red;
+        border-top-color: red;
+      }
+      main > div {
+        display: flex;
+      }
+      input,
+      select {
+        display: block;
+        width: 100%;
+        margin-top: 2px;
+      }
+      label:not(:first-child) {
+        margin-left: 1rem;
+      }
+      label:first-child,
+      label:last-child {
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <ul>
+        <li>
+          <a href="index.html">
+            <img src="<%= require('../../images/logo.svg') %>" alt="Fides" />
+          </a>
+        </li>
+        <li><a>Integer codes</a></li>
+        <li>
+          <a href="https://github.com/siiptuo/fides" target="_blank">
+            <i class="fab fa-github fa-lg"></i>
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </header>
+    <main>
+      <div>
+        <label>
+          Integers:
+          <input name="numbers" value="1,2,3" />
+        </label>
+        <label>
+          Coding:
+          <select name="coding">
+            <option value="unary">Unary coding</option>
+            <option value="elias-gamma">Elias gamma coding</option>
+            <option value="elias-delta">Elias delta coding</option>
+            <option value="elias-omega">Elias omega coding</option>
+          </select>
+        </label>
+        <label>
+          Bits:
+          <input name="bits" value="" />
+        </label>
+      </div>
+      <output></output>
+    </main>
+  </body>
+</html>
