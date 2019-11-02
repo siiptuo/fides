@@ -11,21 +11,35 @@ export class Element {
     return this;
   }
 
+  html(value) {
+    this.element.innerHTML = value;
+    return this;
+  }
+
   text(value) {
     this.element.textContent = value;
     return this;
   }
 
   clear() {
-    this.element.innerHTML = '';
-    return this;
+    return this.html('');
   }
 
   append(tag) {
     return new Element(
       this.element.appendChild(
-        document.createElementNS(this.element.namespaceURI, tag)
+        document.createElementNS(
+          tag === 'svg'
+            ? 'http://www.w3.org/2000/svg'
+            : this.element.namespaceURI,
+          tag
+        )
       )
     );
+  }
+
+  on(event, fn) {
+    this.element.addEventListener(event, fn);
+    return this;
   }
 }
