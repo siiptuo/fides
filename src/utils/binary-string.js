@@ -1,6 +1,12 @@
 // SPDX-FileCopyrightText: 2019 Tuomas Siipola
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+class OutOfRangeError extends Error {
+  constructor() {
+    super('Out of range');
+  }
+}
+
 class BinaryString {
   static fromArray(array) {
     const string = new BinaryString();
@@ -47,6 +53,7 @@ class BinaryString {
   }
 
   slice(a, b) {
+    if (b > this.length()) throw new OutOfRangeError();
     return BinaryString.fromArray(this.data.slice(a, b));
   }
 
@@ -67,4 +74,4 @@ class BinaryString {
   }
 }
 
-module.exports = { BinaryString };
+module.exports = { BinaryString, OutOfRangeError };

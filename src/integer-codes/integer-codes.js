@@ -13,7 +13,7 @@ function unaryDecode(x) {
       return { integer: i, code: x.slice(0, i + 1) };
     }
   }
-  return null;
+  throw new Error('Decode failure');
 }
 
 function binaryEncode(x) {
@@ -23,7 +23,6 @@ function binaryEncode(x) {
 
 function binaryDecode(x) {
   const chunkSize = 8;
-  if (x.length() < chunkSize) return null;
   const code = x.slice(0, chunkSize);
   return { integer: code.toInteger(), code };
 }
@@ -46,11 +45,9 @@ function vlqDecode(x) {
   let binary = BinaryString.withLength(0);
   let i = 0;
   while (x.at(i)) {
-    if (i + chunkSize > x.length()) return null;
     binary = binary.concat(x.slice(i + 1, i + chunkSize));
     i += chunkSize;
   }
-  if (i + chunkSize > x.length()) return null;
   binary = binary.concat(x.slice(i + 1, i + chunkSize));
   return { integer: binary.toInteger(), code: x.slice(0, i + chunkSize) };
 }
@@ -64,14 +61,13 @@ function eliasGammaEncode(x) {
 function eliasGammaDecode(x) {
   for (let i = 0; i < x.length(); i++) {
     if (x.at(i)) {
-      if (i + i >= x.length()) break;
       return {
         integer: x.slice(i, i + i + 1).toInteger(),
         code: x.slice(0, i + i + 1),
       };
     }
   }
-  return null;
+  throw new Error('Decode failure');
 }
 
 function eliasDeltaEncode(x) {
@@ -82,8 +78,6 @@ function eliasDeltaEncode(x) {
 
 function eliasDeltaDecode(x) {
   const result = eliasGammaDecode(x);
-  if (!result || result.code.length() + result.integer - 1 > x.length())
-    return null;
   return {
     integer: x
       .slice(result.code.length(), result.code.length() + result.integer - 1)
@@ -108,7 +102,6 @@ function eliasOmegaDecode(x) {
   let length = 1;
   let y = x;
   while (y.at(0)) {
-    if (length + integer >= x.length()) return null;
     const [a, b] = y.split(integer + 1);
     integer = a.toInteger();
     length += a.length();
@@ -138,7 +131,6 @@ function golombRiceDecode(M, x) {
 
   for (let i = 0; i < x.length(); i++) {
     if (!x.at(i)) {
-      if (i + b > x.length()) return null;
       const r = x.slice(i, i + b).toInteger();
       if (r < cutoff) {
         return {
@@ -146,7 +138,6 @@ function golombRiceDecode(M, x) {
           code: x.slice(0, i + b),
         };
       } else {
-        if (i + b + 1 > x.length()) return null;
         return {
           integer: i * M + x.slice(i, i + b + 1).toInteger() - cutoff,
           code: x.slice(0, i + b + 1),
@@ -155,7 +146,7 @@ function golombRiceDecode(M, x) {
     }
   }
 
-  return null;
+  throw new Error('Decode failure');
 }
 
 function encodeSequence(encoder, numbers) {
@@ -168,13 +159,14 @@ function encodeSequence(encoder, numbers) {
 function decodeSequence(decoder, string) {
   const output = [];
   while (string.length()) {
-    const result = decoder(string);
-    if (!result) {
+    try {
+      const result = decoder(string);
+      output.push(result);
+      string = string.slice(result.code.length());
+    } catch (e) {
       output.push({ integer: null, code: string });
       break;
     }
-    output.push(result);
-    string = string.slice(result.code.length());
   }
   return output;
 }
