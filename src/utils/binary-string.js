@@ -7,6 +7,8 @@ class OutOfRangeError extends Error {
   }
 }
 
+const ValidBinaryString = /^[01]+$/;
+
 class BinaryString {
   static fromArray(array) {
     const string = new BinaryString();
@@ -24,6 +26,7 @@ class BinaryString {
   }
 
   static fromString(x) {
+    if (!ValidBinaryString.test(x)) throw new Error('Invalid input');
     return BinaryString.fromArray(x.split('').map(s => +s));
   }
 

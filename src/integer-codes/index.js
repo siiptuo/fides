@@ -59,6 +59,7 @@ function updateCoding() {
 }
 
 function updateNumbers() {
+  if (!$numbers.checkValidity()) return;
   const numbers = $numbers.value
     .split(',')
     .map(s => parseInt(s))
@@ -70,6 +71,7 @@ function updateNumbers() {
 }
 
 function updateBits() {
+  if (!$bits.checkValidity()) return;
   const bits = BinaryString.fromString($bits.value);
   const decode = decodeFn[$coding.value];
   const codes = decodeSequence(decode, bits);
