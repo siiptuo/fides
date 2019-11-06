@@ -21,8 +21,8 @@ class BinaryString {
     return BinaryString.fromArray(x.split('').map(s => +s));
   }
 
-  static withLength(n) {
-    return BinaryString.fromArray(new Array(n).fill(0));
+  static withLength(n, bit = 0) {
+    return BinaryString.fromArray(new Array(n).fill(bit));
   }
 
   at(i) {

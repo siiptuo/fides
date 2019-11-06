@@ -14,6 +14,8 @@ import {
   eliasDeltaDecode,
   eliasOmegaEncode,
   eliasOmegaDecode,
+  golombRiceEncode,
+  golombRiceDecode,
   encodeSequence,
   decodeSequence,
 } from './integer-codes.js';
@@ -24,6 +26,7 @@ const $numbers = document.getElementsByName('numbers')[0];
 const $bits = document.getElementsByName('bits')[0];
 const $coding = document.getElementsByName('coding')[0];
 const $output = document.getElementsByTagName('output')[0];
+const $M = document.getElementsByName('M')[0];
 
 const encodeFn = {
   'unary': unaryEncode,
@@ -42,6 +45,18 @@ const decodeFn = {
   'elias-delta': eliasDeltaDecode,
   'elias-omega': eliasOmegaDecode,
 };
+
+function updateSettings() {
+  encodeFn['golomb-rice'] = golombRiceEncode.bind(null, $M.value);
+  decodeFn['golomb-rice'] = golombRiceDecode.bind(null, $M.value);
+  updateNumbers();
+}
+
+function updateCoding() {
+  $M.parentNode.style.display =
+    $coding.value === 'golomb-rice' ? 'block' : 'none';
+  updateNumbers();
+}
 
 function updateNumbers() {
   const numbers = $numbers.value
@@ -75,6 +90,8 @@ function updateDisplay(codes) {
 }
 
 $numbers.addEventListener('input', updateNumbers);
-$coding.addEventListener('change', updateNumbers);
+$coding.addEventListener('change', updateCoding);
 $bits.addEventListener('input', updateBits);
-updateNumbers();
+$M.addEventListener('input', updateSettings);
+updateSettings();
+updateCoding();

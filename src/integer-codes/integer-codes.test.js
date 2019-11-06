@@ -15,6 +15,8 @@ const {
   eliasDeltaDecode,
   eliasOmegaEncode,
   eliasOmegaDecode,
+  golombRiceEncode,
+  golombRiceDecode,
   encodeSequence,
   decodeSequence,
 } = require('./integer-codes.js');
@@ -230,4 +232,29 @@ generateTestSuite(
     [1000000, '1010010011111101000010010000000'],
   ],
   [['010011', [[1, '0'], [2, '100'], [null, '11']]]]
+);
+
+generateTestSuite(
+  'Golomb-Rice coding',
+  golombRiceEncode.bind(null, 10),
+  golombRiceDecode.bind(null, 10),
+  [
+    [40, '11110000'],
+    [41, '11110001'],
+    [42, '11110010'],
+    [43, '11110011'],
+    [44, '11110100'],
+    [45, '11110101'],
+    [46, '111101100'],
+    [47, '111101101'],
+    [48, '111101110'],
+    [49, '111101111'],
+    [50, '111110000'],
+  ],
+  [
+    ['111100101111', [[42, '11110010'], [null, '1111']]],
+    ['1111001011110', [[42, '11110010'], [null, '11110']]],
+    ['111100101111001', [[42, '11110010'], [null, '1111001']]],
+    ['1111001011110110', [[42, '11110010'], [null, '11110110']]],
+  ]
 );

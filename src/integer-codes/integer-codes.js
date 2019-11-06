@@ -31,7 +31,7 @@ function binaryDecode(x) {
 function vlqEncode(x) {
   const chunkSize = 8;
   let binary = BinaryString.fromInteger(x);
-  const bits = (chunkSize - 1) * Math.ceil(binary.length() / (chunkSize - 1))
+  const bits = (chunkSize - 1) * Math.ceil(binary.length() / (chunkSize - 1));
   binary = binary.padStart(bits);
   let output = BinaryString.withLength(0);
   for (let i = 0; i < binary.length() - chunkSize; i += chunkSize - 1) {
@@ -117,6 +117,47 @@ function eliasOmegaDecode(x) {
   return { integer, code: x.slice(0, length) };
 }
 
+function golombRiceEncode(M, N) {
+  const q = Math.floor(N / M);
+  const Q = BinaryString.withLength(q, 1).append(0);
+
+  const r = N % M;
+  const b = Math.ceil(Math.log2(M));
+  const cutoff = 2 ** b - M;
+  const R =
+    r < cutoff
+      ? BinaryString.fromInteger(r).padStart(b - 1)
+      : BinaryString.fromInteger(r + cutoff).padStart(b);
+
+  return Q.concat(R);
+}
+
+function golombRiceDecode(M, x) {
+  const b = Math.ceil(Math.log2(M));
+  const cutoff = 2 ** b - M;
+
+  for (let i = 0; i < x.length(); i++) {
+    if (!x.at(i)) {
+      if (i + b > x.length()) return null;
+      const r = x.slice(i, i + b).toInteger();
+      if (r < cutoff) {
+        return {
+          integer: i * M + r,
+          code: x.slice(0, i + b),
+        };
+      } else {
+        if (i + b + 1 > x.length()) return null;
+        return {
+          integer: i * M + x.slice(i, i + b + 1).toInteger() - cutoff,
+          code: x.slice(0, i + b + 1),
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
 function encodeSequence(encoder, numbers) {
   return numbers.reduce(
     (output, x) => output.concat(encoder(x)),
@@ -151,6 +192,8 @@ module.exports = {
   eliasDeltaDecode,
   eliasOmegaEncode,
   eliasOmegaDecode,
+  golombRiceEncode,
+  golombRiceDecode,
   encodeSequence,
   decodeSequence,
 };
