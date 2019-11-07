@@ -3,32 +3,31 @@
 
 const { BinaryString } = require('../utils/binary-string.js');
 
-function unaryEncode(x) {
-  return BinaryString.withLength(x).append(1);
+function unaryEncode({ alternative }, x) {
+  const [a, b] = alternative ? [0, 1] : [1, 0];
+  return BinaryString.withLength(x, a).append(b);
 }
 
-function unaryDecode(x) {
+function unaryDecode({ alternative }, x) {
+  const b = alternative ? 1 : 0;
   for (let i = 0; i < x.length(); i++) {
-    if (x.at(i)) {
+    if (x.at(i) == b) {
       return { integer: i, code: x.slice(0, i + 1) };
     }
   }
   throw new Error('Decode failure');
 }
 
-function binaryEncode(x) {
-  const chunkSize = 8;
+function binaryEncode({ chunkSize }, x) {
   return BinaryString.fromInteger(x).padStart(chunkSize);
 }
 
-function binaryDecode(x) {
-  const chunkSize = 8;
+function binaryDecode({ chunkSize }, x) {
   const code = x.slice(0, chunkSize);
   return { integer: code.toInteger(), code };
 }
 
-function vlqEncode(x) {
-  const chunkSize = 8;
+function vlqEncode({ chunkSize }, x) {
   let binary = BinaryString.fromInteger(x);
   const bits = (chunkSize - 1) * Math.ceil(binary.length() / (chunkSize - 1));
   binary = binary.padStart(bits);
@@ -40,8 +39,7 @@ function vlqEncode(x) {
   return output;
 }
 
-function vlqDecode(x) {
-  const chunkSize = 8;
+function vlqDecode({ chunkSize }, x) {
   let binary = BinaryString.withLength(0);
   let i = 0;
   while (x.at(i)) {
@@ -52,32 +50,28 @@ function vlqDecode(x) {
   return { integer: binary.toInteger(), code: x.slice(0, i + chunkSize) };
 }
 
-function eliasGammaEncode(x) {
-  const b = BinaryString.fromInteger(x);
-  const n = BinaryString.withLength(b.length() - 1);
+function eliasGammaEncode({ alternative }, x) {
+  const b = BinaryString.fromInteger(x).slice(1);
+  const n = unaryEncode({ alternative: !alternative }, b.length());
   return n.concat(b);
 }
 
-function eliasGammaDecode(x) {
-  for (let i = 0; i < x.length(); i++) {
-    if (x.at(i)) {
-      return {
-        integer: x.slice(i, i + i + 1).toInteger(),
-        code: x.slice(0, i + i + 1),
-      };
-    }
-  }
-  throw new Error('Decode failure');
+function eliasGammaDecode({ alternative }, x) {
+  const { integer: length, code } = unaryDecode({ alternative: !alternative }, x);
+  return {
+    integer: x.slice(length + 1, length + 1 + length).prepend(1).toInteger(),
+    code: x.slice(0, length + 1 + length),
+  };
 }
 
-function eliasDeltaEncode(x) {
+function eliasDeltaEncode({ alternative }, x) {
   const b = BinaryString.fromInteger(x);
-  const n = eliasGammaEncode(b.length());
+  const n = eliasGammaEncode({ alternative }, b.length());
   return n.concat(b.slice(1));
 }
 
-function eliasDeltaDecode(x) {
-  const result = eliasGammaDecode(x);
+function eliasDeltaDecode({ alternative }, x) {
+  const result = eliasGammaDecode({ alternative }, x);
   return {
     integer: x
       .slice(result.code.length(), result.code.length() + result.integer - 1)
@@ -87,7 +81,7 @@ function eliasDeltaDecode(x) {
   };
 }
 
-function eliasOmegaEncode(x) {
+function eliasOmegaEncode(params, x) {
   let code = BinaryString.fromArray([0]);
   while (x !== 1) {
     const n = BinaryString.fromInteger(x);
@@ -97,7 +91,7 @@ function eliasOmegaEncode(x) {
   return code;
 }
 
-function eliasOmegaDecode(x) {
+function eliasOmegaDecode(params, x) {
   let integer = 1;
   let length = 1;
   let y = x;
@@ -110,7 +104,7 @@ function eliasOmegaDecode(x) {
   return { integer, code: x.slice(0, length) };
 }
 
-function golombRiceEncode(M, N) {
+function golombRiceEncode({ M }, N) {
   const q = Math.floor(N / M);
   const Q = BinaryString.withLength(q, 1).append(0);
 
@@ -125,7 +119,7 @@ function golombRiceEncode(M, N) {
   return Q.concat(R);
 }
 
-function golombRiceDecode(M, x) {
+function golombRiceDecode({ M }, x) {
   const b = Math.ceil(Math.log2(M));
   const cutoff = 2 ** b - M;
 

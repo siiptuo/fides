@@ -26,35 +26,55 @@ const $numbers = document.getElementsByName('numbers')[0];
 const $bits = document.getElementsByName('bits')[0];
 const $coding = document.getElementsByName('coding')[0];
 const $output = document.getElementsByTagName('output')[0];
-const $M = document.getElementsByName('M')[0];
+
+const currentSettings = {};
+
+for (const $container of document.getElementsByClassName('settings')) {
+  const coding = $container.className.slice(18);
+  const settings = {};
+  for (const $param of $container.querySelectorAll('[name]')) {
+    if ($param.type === 'checkbox') {
+      $param.addEventListener('change', event => {
+        settings[$param.name] = $param.checked;
+        updateNumbers();
+      });
+      settings[$param.name] = $param.checked;
+    } else {
+      $param.addEventListener('change', event => {
+        settings[$param.name] = +$param.value;
+        updateNumbers();
+      });
+      settings[$param.name] = +$param.value;
+    }
+  }
+  currentSettings[coding] = settings;
+}
 
 const encodeFn = {
-  'unary': unaryEncode,
-  'binary': binaryEncode,
-  'vlq': vlqEncode,
-  'elias-gamma': eliasGammaEncode,
-  'elias-delta': eliasDeltaEncode,
-  'elias-omega': eliasOmegaEncode,
+  'unary': unaryEncode.bind(null, currentSettings['unary']),
+  'binary': binaryEncode.bind(null, currentSettings['binary']),
+  'vlq': vlqEncode.bind(null, currentSettings['vlq']),
+  'elias-gamma': eliasGammaEncode.bind(null, currentSettings['elias-gamma']),
+  'elias-delta': eliasDeltaEncode.bind(null, currentSettings['elias-delta']),
+  'elias-omega': eliasOmegaEncode.bind(null, currentSettings['elias-omega']),
+  'golomb-rice': golombRiceEncode.bind(null, currentSettings['golomb-rice']),
 };
 
 const decodeFn = {
-  'unary': unaryDecode,
-  'binary': binaryDecode,
-  'vlq': vlqDecode,
-  'elias-gamma': eliasGammaDecode,
-  'elias-delta': eliasDeltaDecode,
-  'elias-omega': eliasOmegaDecode,
+  'unary': unaryDecode.bind(null, currentSettings['unary']),
+  'binary': binaryDecode.bind(null, currentSettings['binary']),
+  'vlq': vlqDecode.bind(null, currentSettings['vlq']),
+  'elias-gamma': eliasGammaDecode.bind(null, currentSettings['elias-gamma']),
+  'elias-delta': eliasDeltaDecode.bind(null, currentSettings['elias-delta']),
+  'elias-omega': eliasOmegaDecode.bind(null, currentSettings['elias-omega']),
+  'golomb-rice': golombRiceDecode.bind(null, currentSettings['golomb-rice']),
 };
 
-function updateSettings() {
-  encodeFn['golomb-rice'] = golombRiceEncode.bind(null, $M.value);
-  decodeFn['golomb-rice'] = golombRiceDecode.bind(null, $M.value);
-  updateNumbers();
-}
-
 function updateCoding() {
-  $M.parentNode.style.display =
-    $coding.value === 'golomb-rice' ? 'block' : 'none';
+  for (const $container of document.getElementsByClassName('settings')) {
+    const coding = $container.className.slice(18);
+    $container.style.display = $coding.value === coding ? 'block' : 'none';
+  }
   updateNumbers();
 }
 
@@ -94,6 +114,4 @@ function updateDisplay(codes) {
 $numbers.addEventListener('input', updateNumbers);
 $coding.addEventListener('change', updateCoding);
 $bits.addEventListener('input', updateBits);
-$M.addEventListener('input', updateSettings);
-updateSettings();
 updateCoding();

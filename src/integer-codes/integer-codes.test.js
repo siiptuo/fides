@@ -90,8 +90,8 @@ function generateTestSuite(title, encode, decode, examples, examples2) {
 
 generateTestSuite(
   'Unary coding',
-  unaryEncode,
-  unaryDecode,
+  unaryEncode.bind(null, { alternative: true }),
+  unaryDecode.bind(null, { alternative: true }),
   [
     [0, '1'],
     [1, '01'],
@@ -109,8 +109,8 @@ generateTestSuite(
 
 generateTestSuite(
   'Fixed-length binary',
-  binaryEncode,
-  binaryDecode,
+  binaryEncode.bind(null, { chunkSize: 8 }),
+  binaryDecode.bind(null, { chunkSize: 8 }),
   [
     [0, '00000000'],
     [1, '00000001'],
@@ -128,8 +128,8 @@ generateTestSuite(
 
 generateTestSuite(
   'Variable-length quantity',
-  vlqEncode,
-  vlqDecode,
+  vlqEncode.bind(null, { chunkSize: 8 }),
+  vlqDecode.bind(null, { chunkSize: 8 }),
   [
     [0, '00000000'],
     [127, '01111111'],
@@ -154,8 +154,8 @@ generateTestSuite(
 
 generateTestSuite(
   'Elias gamma coding',
-  eliasGammaEncode,
-  eliasGammaDecode,
+  eliasGammaEncode.bind(null, { alternative: false }),
+  eliasGammaDecode.bind(null, { alternative: false }),
   [
     [1, '1'],
     [2, '010'],
@@ -180,8 +180,8 @@ generateTestSuite(
 
 generateTestSuite(
   'Elias delta coding',
-  eliasDeltaEncode,
-  eliasDeltaDecode,
+  eliasDeltaEncode.bind(null, { alternative: false }),
+  eliasDeltaDecode.bind(null, { alternative: false }),
   [
     [1, '1'],
     [2, '0100'],
@@ -206,8 +206,8 @@ generateTestSuite(
 
 generateTestSuite(
   'Elias omega coding',
-  eliasOmegaEncode,
-  eliasOmegaDecode,
+  eliasOmegaEncode.bind(null, {}),
+  eliasOmegaDecode.bind(null, {}),
   [
     [1, '0'],
     [2, '100'],
@@ -237,8 +237,8 @@ generateTestSuite(
 
 generateTestSuite(
   'Golomb-Rice coding',
-  golombRiceEncode.bind(null, 10),
-  golombRiceDecode.bind(null, 10),
+  golombRiceEncode.bind(null, { M: 10 }),
+  golombRiceDecode.bind(null, { M: 10 }),
   [
     [40, '11110000'],
     [41, '11110001'],

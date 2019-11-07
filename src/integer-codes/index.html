@@ -73,6 +73,9 @@
       label:last-child {
         flex-grow: 1;
       }
+      .settings {
+        margin-left: 1rem;
+      }
     </style>
   </head>
   <body>
@@ -116,10 +119,42 @@
             <option value="golomb-rice">Golomb-Rice coding</option>
           </select>
         </label>
-        <label>
-          M:
-          <input type="number" name="M" value="10" min="1" />
-        </label>
+        <div class="settings settings-unary">
+          <label>
+            <input type="checkbox" name="alternative" />
+            Alternative
+          </label>
+        </div>
+        <div class="settings settings-binary">
+          <label>
+            Bits per chunk:
+            <input type="number" name="chunkSize" value="8" min="1" />
+          </label>
+        </div>
+        <div class="settings settings-vlq">
+          <label>
+            Bits per chunk:
+            <input type="number" name="chunkSize" value="8" min="1" />
+          </label>
+        </div>
+        <div class="settings settings-elias-gamma">
+          <label>
+            <input type="checkbox" name="alternative" />
+            Alternative
+          </label>
+        </div>
+        <div class="settings settings-elias-delta">
+          <label>
+            <input type="checkbox" name="alternative" />
+            Alternative
+          </label>
+        </div>
+        <div class="settings settings-golomb-rice">
+          <label>
+            M:
+            <input type="number" name="M" value="10" min="1" />
+          </label>
+        </div>
       </div>
       <output></output>
     </main>
