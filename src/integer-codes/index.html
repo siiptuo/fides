@@ -76,6 +76,11 @@
       .settings {
         margin-left: 1rem;
       }
+      .settings-error {
+        display: none;
+        margin-left: 1rem;
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -134,7 +139,7 @@
         <div class="settings settings-vlq">
           <label>
             Bits per chunk:
-            <input type="number" name="chunkSize" value="8" min="1" />
+            <input type="number" name="chunkSize" value="8" min="2" />
           </label>
         </div>
         <div class="settings settings-elias-gamma">
@@ -155,6 +160,7 @@
             <input type="number" name="M" value="10" min="1" />
           </label>
         </div>
+        <div class="settings-error"></div>
       </div>
       <output></output>
     </main>

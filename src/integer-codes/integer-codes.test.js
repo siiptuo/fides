@@ -153,6 +153,25 @@ generateTestSuite(
 );
 
 generateTestSuite(
+  'Variable-length quantity',
+  vlqEncode.bind(null, { chunkSize: 2 }),
+  vlqDecode.bind(null, { chunkSize: 2 }),
+  [
+    [0, '00'],
+    [1, '01'],
+    [2, '1100'],
+    [3, '1101'],
+    [4, '111000'],
+    [5, '111001'],
+    [6, '111100'],
+    [7, '111101'],
+    [8, '11101000'],
+    [9, '11101001'],
+  ],
+  []
+);
+
+generateTestSuite(
   'Elias gamma coding',
   eliasGammaEncode.bind(null, { alternative: false }),
   eliasGammaDecode.bind(null, { alternative: false }),

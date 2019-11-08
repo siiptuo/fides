@@ -19,7 +19,12 @@ function unaryDecode({ alternative }, x) {
 }
 
 function binaryEncode({ chunkSize }, x) {
-  return BinaryString.fromInteger(x).padStart(chunkSize);
+  const b = BinaryString.fromInteger(x);
+  if (b.length() > chunkSize)
+    throw new Error(
+      `Encoding integer ${x} requires at least ${b.length()} bits`
+    );
+  return b.padStart(chunkSize);
 }
 
 function binaryDecode({ chunkSize }, x) {
@@ -32,7 +37,7 @@ function vlqEncode({ chunkSize }, x) {
   const bits = (chunkSize - 1) * Math.ceil(binary.length() / (chunkSize - 1));
   binary = binary.padStart(bits);
   let output = BinaryString.withLength(0);
-  for (let i = 0; i < binary.length() - chunkSize; i += chunkSize - 1) {
+  for (let i = 0; i < binary.length() - (chunkSize - 1); i += chunkSize - 1) {
     output = output.append(1).concat(binary.slice(i, i + chunkSize - 1));
   }
   output = output.append(0).concat(binary.slice(-(chunkSize - 1)));
@@ -51,20 +56,28 @@ function vlqDecode({ chunkSize }, x) {
 }
 
 function eliasGammaEncode({ alternative }, x) {
+  if (x === 0) throw new Error('Encoding 0 is not supported');
   const b = BinaryString.fromInteger(x).slice(1);
   const n = unaryEncode({ alternative: !alternative }, b.length());
   return n.concat(b);
 }
 
 function eliasGammaDecode({ alternative }, x) {
-  const { integer: length, code } = unaryDecode({ alternative: !alternative }, x);
+  const { integer: length, code } = unaryDecode(
+    { alternative: !alternative },
+    x
+  );
   return {
-    integer: x.slice(length + 1, length + 1 + length).prepend(1).toInteger(),
+    integer: x
+      .slice(length + 1, length + 1 + length)
+      .prepend(1)
+      .toInteger(),
     code: x.slice(0, length + 1 + length),
   };
 }
 
 function eliasDeltaEncode({ alternative }, x) {
+  if (x === 0) throw new Error('Encoding 0 is not supported');
   const b = BinaryString.fromInteger(x);
   const n = eliasGammaEncode({ alternative }, b.length());
   return n.concat(b.slice(1));
@@ -82,6 +95,7 @@ function eliasDeltaDecode({ alternative }, x) {
 }
 
 function eliasOmegaEncode(params, x) {
+  if (x === 0) throw new Error('Encoding 0 is not supported');
   let code = BinaryString.fromArray([0]);
   while (x !== 1) {
     const n = BinaryString.fromInteger(x);

@@ -26,6 +26,7 @@ const $numbers = document.getElementsByName('numbers')[0];
 const $bits = document.getElementsByName('bits')[0];
 const $coding = document.getElementsByName('coding')[0];
 const $output = document.getElementsByTagName('output')[0];
+const $settingsError = document.getElementsByClassName('settings-error')[0];
 
 const currentSettings = {};
 
@@ -41,6 +42,7 @@ for (const $container of document.getElementsByClassName('settings')) {
       settings[$param.name] = $param.checked;
     } else {
       $param.addEventListener('change', event => {
+        if (!$param.checkValidity()) return;
         settings[$param.name] = +$param.value;
         updateNumbers();
       });
@@ -85,9 +87,15 @@ function updateNumbers() {
     .map(s => parseInt(s))
     .filter(x => !isNaN(x));
   const encode = encodeFn[$coding.value];
-  const codes = numbers.map(encode);
-  $bits.value = codes.join('');
-  updateDisplay(codes.map((code, i) => ({ integer: numbers[i], code })));
+  try {
+    const codes = numbers.map(encode);
+    $bits.value = codes.join('');
+    updateDisplay(codes.map((code, i) => ({ integer: numbers[i], code })));
+    $settingsError.style.display = 'none';
+  } catch (e) {
+    $settingsError.textContent = e.message;
+    $settingsError.style.display = 'block';
+  }
 }
 
 function updateBits() {
@@ -105,7 +113,7 @@ function updateDisplay(codes) {
       `${result}
       <div${integer === null ? ' class="error"' : ''}>
         <div class="code">${code}</div>
-        <div class="integer">${integer || ''}</div>
+        <div class="integer">${integer !== null ? integer : ''}</div>
       </div>`,
     ''
   );
