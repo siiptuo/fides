@@ -120,7 +120,8 @@ function eliasOmegaDecode(params, x) {
 
 function golombRiceEncode({ M }, N) {
   const q = Math.floor(N / M);
-  const Q = BinaryString.withLength(q, 1).append(0);
+  const Q = unaryEncode({ alternative: false }, q);
+  if (M == 1) return Q;
 
   const r = N % M;
   const b = Math.ceil(Math.log2(M));
