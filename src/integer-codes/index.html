@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link
       rel="shortcut icon"
-      href="<%= require('../../images/favicon.ico') %>"
+      href="/<%= require('../../images/favicon.ico') %>"
     />
     <title>Integer codes - Fides</title>
     <link
@@ -56,9 +56,13 @@
       }
       .coding {
         display: flex;
+        height: 3rem;
       }
       .coding label {
         max-width: 200px;
+      }
+      .coding span {
+        margin-right: 1rem;
       }
       input,
       select {
@@ -73,13 +77,44 @@
       label:last-child {
         flex-grow: 1;
       }
-      .settings {
-        margin-left: 1rem;
-      }
       .settings-error {
         display: none;
         margin-left: 1rem;
         color: red;
+      }
+      article {
+        display: none;
+      }
+      p {
+        max-width: 600px;
+        margin: 1rem auto;
+        font-size: 16px;
+        line-height: 1.5;
+        hyphens: auto;
+      }
+      .codings {
+        list-style: none;
+        padding: 0;
+        text-align: center;
+        max-width: 600px;
+        margin: 1rem auto;
+      }
+      .codings li {
+        display: inline-block;
+      }
+      .codings li a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        padding: 6px 8px;
+        border-radius: 2px;
+        background-color: #eee;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+      .codings li a.current {
+        background-color: black;
+        color: white;
       }
     </style>
   </head>
@@ -87,8 +122,8 @@
     <header>
       <ul>
         <li>
-          <a href="index.html">
-            <img src="<%= require('../../images/logo.svg') %>" alt="Fides" />
+          <a href="/">
+            <img src="/<%= require('../../images/logo.svg') %>" alt="Fides" />
           </a>
         </li>
         <li><a>Integer codes</a></li>
@@ -101,6 +136,30 @@
       </ul>
     </header>
     <main>
+      <p>
+        Integer codes are methods of encoding natural numbers (i.e. 1, 2, 3,
+        &hellip;) into binary strings (e.g. 2 &rarr; <code>0010</code>).
+        Important property of integer codes is the ability to encode any
+        sequence of natural numbers into a single binary string such that it can
+        later be decoded unambiguously.
+      </p>
+      <ul class="codings">
+        <li><a href="/integer-codes/unary">Unary coding</a></li>
+        <li>
+          <a href="/integer-codes/fixed-length-binary">Fixed-length binary</a>
+        </li>
+        <li>
+          <a href="/integer-codes/variable-length-quantity"
+            >Variable-length quantity</a
+          >
+        </li>
+        <li><a href="/integer-codes/elias-gamma">Elias &gamma; coding</a></li>
+        <li><a href="/integer-codes/elias-delta">Elias &delta; coding</a></li>
+        <li><a href="/integer-codes/elias-omega">Elias &omega; coding</a></li>
+        <li>
+          <a href="/integer-codes/golomb-rice">Golomb&ndash;Rice coding</a>
+        </li>
+      </ul>
       <div class="inputs">
         <label>
           Integers:
@@ -112,31 +171,20 @@
         </label>
       </div>
       <div class="coding">
-        <label>
-          Coding:
-          <select name="coding">
-            <option value="unary">Unary coding</option>
-            <option value="binary">Fixed-length binary</option>
-            <option value="vlq">Variable-length quantity</option>
-            <option value="elias-gamma">Elias gamma coding</option>
-            <option value="elias-delta">Elias delta coding</option>
-            <option value="elias-omega">Elias omega coding</option>
-            <option value="golomb-rice">Golomb-Rice coding</option>
-          </select>
-        </label>
+        <span>Parameters:</span>
         <div class="settings settings-unary">
           <label>
             <input type="checkbox" name="alternative" />
             Alternative
           </label>
         </div>
-        <div class="settings settings-binary">
+        <div class="settings settings-fixed-length-binary">
           <label>
             Bits per chunk:
             <input type="number" name="chunkSize" value="8" min="1" />
           </label>
         </div>
-        <div class="settings settings-vlq">
+        <div class="settings settings-variable-length-quantity">
           <label>
             Bits per chunk:
             <input type="number" name="chunkSize" value="8" min="2" />
@@ -163,6 +211,34 @@
         <div class="settings-error"></div>
       </div>
       <output></output>
+      <article class="unary">
+        <!-- <h2>Unary coding</h2> -->
+        <!-- <p>Unary coding description here</p> -->
+      </article>
+      <article class="fixed-length-binary">
+        <!-- <h2>Fixed&#45;length binary</h2> -->
+        <!-- <p>Fixed&#45;length binary description here</p> -->
+      </article>
+      <article class="variable-length-quantity">
+        <!-- <h2>Variable&#45;length quantity</h2> -->
+        <!-- <p>Variable&#45;length description here</p> -->
+      </article>
+      <article class="elias-gamma">
+        <!-- <h2>Elias &#38;gamma; coding</h2> -->
+        <!-- <p>Elias &#38;gamma; coding description here</p> -->
+      </article>
+      <article class="elias-delta">
+        <!-- <h2>Elias &#38;delta; coding</h2> -->
+        <!-- <p>Elias &#38;delta; coding description here</p> -->
+      </article>
+      <article class="elias-omega">
+        <!-- <h2>Elias &#38;omega; coding</h2> -->
+        <!-- <p>Elias &#38;omega; coding description here</p> -->
+      </article>
+      <article class="golomb-rice">
+        <!-- <h2>Golomb&#38;ndash;Rice coding</h2> -->
+        <!-- <p>Golomb&#38;ndash;Rice coding description here</p> -->
+      </article>
     </main>
   </body>
 </html>

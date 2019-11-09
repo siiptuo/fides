@@ -22,6 +22,9 @@ module.exports = {
   },
   devServer: {
     contentBase: './public',
+    historyApiFallback: {
+      rewrites: [{ from: /^\/integer-codes/, to: '/integer-codes/index.html' }],
+    },
   },
   module: {
     rules: [
@@ -118,7 +121,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/integer-codes/index.html',
-      filename: 'integer-codes.html',
+      filename: 'integer-codes/index.html',
       chunks: ['integer-codes'],
     }),
     new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
