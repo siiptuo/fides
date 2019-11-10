@@ -13,6 +13,7 @@
     "image-webpack-loader": "^6.0.0",
     "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^6.2.2",
+    "nunjucks": "^3.2.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^1.18.2",
     "terser-webpack-plugin": "^2.2.1",
@@ -24,7 +25,7 @@
     "build": "webpack",
     "start": "webpack-dev-server --open",
     "test": "mocha src/**/*.test.js",
-    "prettier": "prettier --write *.js src/**/*.{js,html}"
+    "prettier": "prettier --write *.js src/**/*.{js,css}"
   },
   "repository": {
     "type": "git",

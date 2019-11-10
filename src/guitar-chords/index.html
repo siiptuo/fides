@@ -1,45 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link
-      rel="shortcut icon"
-      href="<%= require('../../images/favicon.ico') %>"
-    />
-    <title>Guitar chords - Fides</title>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-      integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <header>
-      <ul>
-        <li>
-          <a href="index.html">
-            <img src="<%= require('../../images/logo.svg') %>" alt="Fides" />
-          </a>
-        </li>
-        <li><a>Guitar chords</a></li>
-        <li>
-          <a href="https://github.com/siiptuo/fides" target="_blank">
-            <i class="fab fa-github fa-lg"></i>
-            GitHub
-          </a>
-        </li>
-      </ul>
-    </header>
-    <main>
-      <form class="search-form">
-        <input type="search" name="chord" placeholder="Chord" />
-        <button type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
-      <output></output>
-    </main>
-  </body>
-</html>
+{% set title = "Guitar chords" %}
+
+{% extends "../templates/page.html" %}
+
+{% block main %}
+  <form class="search-form">
+    <input type="search" name="chord" placeholder="Chord" />
+    <button type="submit">
+      <i class="fas fa-search"></i>
+    </button>
+  </form>
+  <output></output>
+{% endblock %}

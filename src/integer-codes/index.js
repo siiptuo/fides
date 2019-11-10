@@ -20,7 +20,9 @@ import {
   decodeSequence,
 } from './integer-codes.js';
 import { BinaryString } from '../utils/binary-string.js';
+
 import '../style.css';
+import './style.css';
 
 const $numbers = document.getElementsByName('numbers')[0];
 const $bits = document.getElementsByName('bits')[0];

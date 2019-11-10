@@ -88,6 +88,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.html$/,
+        loader: './nunjucks-loader.js',
+      },
     ],
   },
   optimization: {
@@ -95,8 +99,13 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: 'src/templates/index.html',
       filename: 'index.html',
+      chunks: ['style'],
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/templates/about.html',
+      filename: 'about.html',
       chunks: ['style'],
     }),
     new HtmlWebpackPlugin({

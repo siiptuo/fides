@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="shortcut icon"
+      href="/{{ require('../../images/favicon.ico') }}"
+    />
+    <title>{% if title %}{{ title }} - {% endif %}Fides</title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
+    />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <ul>
+        <li>
+          <a href="/">
+            <img src="/{{ require('../../images/logo.svg') }}" alt="Fides" />
+          </a>
+        </li>
+        <li>{{ title }}</li>
+        <!-- <li class="menu&#45;item"> -->
+        <!--   <a href="#"> -->
+        <!--     English &#38;#9660; -->
+        <!--   </a> -->
+        <!-- </li> -->
+        <li class="menu-item">
+          <a href="/">
+            <i class="fas fa-tools fa-lg"></i>
+            More tools
+          </a>
+        </li>
+        <!-- <li class="menu&#45;item"> -->
+        <!--   <a href="#"> -->
+        <!--     <i class="fas fa&#45;plus&#45;square fa&#45;lg"></i> -->
+        <!--     Improve -->
+        <!--   </a> -->
+        <!-- </li> -->
+        <li class="menu-item">
+          <a href="/about.html">
+            <i class="fas fa-info-circle fa-lg"></i>
+            About
+          </a>
+        </li>
+      </ul>
+    </header>
+    <main>
+      {% block main %}{% endblock %}
+    </main>
+  </body>
+</html>
