@@ -31,10 +31,13 @@ module.exports = function(content) {
     new MyLoader(this.context, this.addDependency)
   );
   const html = env.renderString(content, {
-    require: url => requireBegin.source + url + requireEnd.source,
+    require: url =>
+      new nunjucks.runtime.SafeString(
+        requireBegin.source + url + requireEnd.source
+      ),
   });
   const code = JSON.stringify(html)
-    .replace(new RegExp(requireBegin, 'g'), '" + require("')
-    .replace(new RegExp(requireEnd, 'g'), '") + "');
+    .replace(requireBegin, '" + require("')
+    .replace(requireEnd, '") + "');
   return 'module.exports = ' + code + ';';
 };
